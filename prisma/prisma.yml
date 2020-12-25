@@ -1,0 +1,6 @@
+endpoint: https://prisma.interaktifis.com/maaslisozluk/prod
+datamodel: datamodel.prisma
+secret: interaktifisdiscord
+generate:
+  - generator: graphql-schema
+    output: ./../src/generated/prisma.graphql

@@ -1,0 +1,198 @@
+type Query {
+  users(query: String): [User!]!
+  user(id: ID!): User!
+  checkToken(token: String!): User!
+  checkUsername(username: String!): User
+  categories: [Category!]!
+  category(id: ID!): Category!
+  topics: [Topic!]!
+  topic(id: ID!): Topic!
+  posts(topic: ID!): [Post!]!
+  post(id: ID!): Post!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): AuthPayload!
+  updateUser(data: UpdateUserInput, id: ID!): User!
+  deleteUser(id: ID!): User!
+  loginUser(data: LoginUserInput!): AuthPayload!
+
+  createCategory(data: CreateCategoryInput!): Category!
+  updateCategory(data: UpdateCategoryInput, id: ID!): Category!
+  deleteCategory(id: ID!): Category!
+
+  createTopic(data: CreateTopicInput!, category: ID!): Topic!
+  updateTopic(data: UpdateTopicInput, id: ID!): Topic!
+  deleteTopic(id: ID!): Topic!
+
+  createPost(data: CreatePostInput!, topic: ID!): Post!
+  updatePost(data: UpdatePostInput, id: ID!): Post!
+  deletePost(id: ID!): Post!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+  twoFactorCode: String
+}
+
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  city: String
+  agreement: String!
+  agreementVersion: Float!
+  emailActivation: Boolean!
+  twoFactorActivation: Boolean!
+  theme: Theme!
+  budget: Float!
+  topics: [Topic!]!
+  posts: [Post!]!
+  transactions: [Transaction!]!
+  likes: [Like!]!
+  favorites: [Favorite!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  city: String
+  password: String!
+}
+
+input UpdateUserInput {
+  email: String
+  city: String
+  password: String
+}
+
+type Transaction {
+  id: ID!
+  amount: Float!
+  budgetType: BudgetType!
+  user: User!
+  topic: Topic
+  post: Post
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Category {
+  id: ID!
+  title: String!
+  description: String
+  topics: [Topic!]!
+  slug: String!
+  order: Int!
+}
+
+input CreateCategoryInput {
+  title: String!
+  description: String
+}
+
+input UpdateCategoryInput {
+  title: String
+  description: String
+}
+
+type Topic {
+  id: ID!
+  title: String!
+  slug: String!
+  category: Category!
+  user: User
+  posts: [Post!]!
+  transactions: [Transaction!]!
+  paidTimes: Int!
+  status: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input CreateTopicInput {
+  title: String!
+  description: String!
+}
+input UpdateTopicInput {
+  title: String!
+}
+
+type Post {
+  id: ID!
+  description: String!
+  topic: Topic!
+  user: User!
+  favorites: [Favorite!]!
+  likes: [Like!]!
+  favoritesPaidTimes: Int!
+  likesPaidTimes: Int!
+  dislikesPaidTimes: Int!
+  transactions: [Transaction!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input CreatePostInput {
+  description: String!
+}
+
+input UpdatePostInput {
+  description: String
+}
+
+type Favorite {
+  id: ID!
+  post: Post!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Like {
+  id: ID!
+  likeType: LikeType
+  post: Post!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum LikeType {
+  LIKE
+  DISLIKE
+}
+
+enum BudgetType {
+  FAVORITE
+  LIKE
+  TOPIC
+  POST
+  WELCOME
+  REPORT
+  DELETEDPOST
+  DISLIKE
+  PAYMENT
+}
+
+enum Theme {
+  LIGHT
+  DARK
+}
+
+enum UserType {
+  ADMIN
+  MODERATOR
+  SUBSCRIBER
+  USER
+  PASSIVE
+  BANNED
+}

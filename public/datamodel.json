@@ -1,0 +1,119 @@
+type User {
+  id: ID! @id
+  username: String! @unique
+  email: String! @unique
+  city: String!
+  password: String!
+  userType: UserType!
+  agreement: String!
+  agreementVersion: Float!
+  emailActivationCode: String!
+  emailActivation: Boolean!
+  twoFactorCode: String!
+  twoFactorActivation: Boolean!
+  theme: Theme!
+  budget: Float!
+  topics: [Topic!]! @relation(name: "UserToTopic", onDelete: SET_NULL)
+  posts: [Post!]! @relation(name: "UserToPost", onDelete: CASCADE)
+  transactions: [Transaction!]! @relation(name: "TransactionToUser", onDelete: SET_NULL)
+  likes: [Like!]! @relation(name: "LikeToUser", onDelete: CASCADE)
+  favorites: [Favorite!]! @relation(name: "FavoriteToUser", onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Transaction {
+  id: ID! @id
+  amount: Float!
+  budgetType: BudgetType!
+  user: User! @relation(name: "TransactionToUser", onDelete: SET_NULL)
+  topic: Topic @relation(name: "TransactionToTopic", onDelete: SET_NULL)
+  post: Post @relation(name: "TransactionToPost", onDelete: SET_NULL)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Category {
+  id: ID! @id
+  title: String!
+  description: String
+  topics: [Topic!]! @relation(name: "TopicToCategory", onDelete: CASCADE)
+  slug: String! @unique
+}
+
+type Topic {
+  id: ID! @id
+  title: String!
+  slug: String! @unique
+  category: Category! @relation(name: "TopicToCategory", onDelete: SET_NULL)
+  user: User @relation(name: "UserToTopic", onDelete: SET_NULL)
+  posts: [Post!]! @relation(name: "TopicToPost", onDelete: CASCADE)
+  transactions: [Transaction!]! @relation(name: "TransactionToTopic", onDelete: SET_NULL)
+  paidTimes: Int!
+  status: Boolean!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Post {
+  id: ID! @id
+  description: String!
+  topic: Topic! @relation(name: "TopicToPost", onDelete: SET_NULL)
+  user: User! @relation(name: "UserToPost", onDelete: SET_NULL)
+  favorites: [Favorite!]! @relation(name: "FavoriteToPost", onDelete: CASCADE)
+  likes: [Like!]! @relation(name: "LikeToPost", onDelete: CASCADE)
+  favoritesPaidTimes: Int!
+  likesPaidTimes: Int!
+  dislikesPaidTimes: Int!
+  transactions: [Transaction!]! @relation(name: "TransactionToPost", onDelete: SET_NULL)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Favorite {
+  id: ID! @id
+  post: Post! @relation(name: "FavoriteToPost", onDelete: SET_NULL)
+  user: User! @relation(name: "FavoriteToUser", onDelete: SET_NULL)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Like {
+  id: ID! @id
+  likeType: LikeType
+  post: Post! @relation(name: "LikeToPost", onDelete: SET_NULL)
+  user: User! @relation(name: "LikeToUser", onDelete: SET_NULL)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+enum LikeType {
+  LIKE
+  DISLIKE
+}
+
+enum BudgetType {
+  FAVORITE
+  LIKE
+  TOPIC
+  POST
+  WELCOME
+  REPORT
+  DELETEDPOST
+  DISLIKE
+  PAYMENT
+}
+
+enum Theme {
+  LIGHT
+  DARK
+}
+
+enum UserType {
+  ADMIN
+  MODERATOR
+  SUBSCRIBER
+  USER
+  PASSIVE
+  BANNED
+}
