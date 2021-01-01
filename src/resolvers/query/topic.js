@@ -1,13 +1,26 @@
 const topicQuery = {
   topics(parent, args, { prisma }, info) {
-    return prisma.query.topics({}, info);
+    return prisma.query.topics({ orderBy: "updatedAt_DESC" }, info);
   },
   topic(parent, args, { prisma }, info) {
     return prisma.query.topic(
       {
         where: {
-          id: args.id,
+          slug: args.slug,
         },
+      },
+      info
+    );
+  },
+  authorTopics(parent, args, { prisma }, info) {
+    return prisma.query.topics(
+      {
+        where: {
+          user: {
+            username: args.user,
+          },
+        },
+        orderBy: "updatedAt_DESC",
       },
       info
     );

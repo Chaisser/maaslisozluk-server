@@ -6,7 +6,9 @@ type Query {
   categories: [Category!]!
   category(id: ID!): Category!
   topics: [Topic!]!
-  topic(id: ID!): Topic!
+  authorTopics(user: String!): [Topic!]!
+  authorPosts(user: String!): [Post!]!
+  topic(slug: String!): Topic
   posts(topic: ID!): [Post!]!
   post(id: ID!): Post!
 }
@@ -25,7 +27,7 @@ type Mutation {
   updateTopic(data: UpdateTopicInput, id: ID!): Topic!
   deleteTopic(id: ID!): Topic!
 
-  createPost(data: CreatePostInput!, topic: ID!): Post!
+  createPost(data: CreatePostInput!, topic: String!): Post!
   updatePost(data: UpdatePostInput, id: ID!): Post!
   deletePost(id: ID!): Post!
 }
@@ -50,6 +52,8 @@ type User {
   agreementVersion: Float!
   emailActivation: Boolean!
   twoFactorActivation: Boolean!
+  topicsCount: Int
+  postsCount: Int
   theme: Theme!
   budget: Float!
   topics: [Topic!]!
@@ -90,6 +94,7 @@ type Category {
   title: String!
   description: String
   topics: [Topic!]!
+  topicsCount: Int
   slug: String!
   order: Int!
 }
@@ -113,6 +118,7 @@ type Topic {
   posts: [Post!]!
   transactions: [Transaction!]!
   paidTimes: Int!
+  postsCount: Int
   status: Boolean!
   createdAt: String!
   updatedAt: String!

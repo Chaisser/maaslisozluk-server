@@ -2,7 +2,7 @@ import getUser from "./../../utils/getUserId";
 
 const postMutation = {
   createPost(parent, args, { request, prisma }, info) {
-    const topicId = args.topic;
+    const slug = args.topic;
     const { description } = args.data;
     const user = getUser(request);
     const userId = user.userId;
@@ -15,7 +15,7 @@ const postMutation = {
           likesPaidTimes: 0,
           dislikesPaidTimes: 0,
           user: { connect: { id: userId } },
-          topic: { connect: { id: topicId } },
+          topic: { connect: { slug } },
         },
       },
       info

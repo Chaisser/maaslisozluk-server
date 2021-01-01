@@ -1757,7 +1757,7 @@ input TopicWhereUniqueInput {
 
 type Transaction {
   id: ID!
-  amount: Float!
+  amount: Int!
   budgetType: BudgetType!
   user: User!
   topic: Topic
@@ -1774,7 +1774,7 @@ type TransactionConnection {
 
 input TransactionCreateInput {
   id: ID
-  amount: Float!
+  amount: Int!
   budgetType: BudgetType!
   user: UserCreateOneWithoutTransactionsInput!
   topic: TopicCreateOneWithoutTransactionsInput
@@ -1798,7 +1798,7 @@ input TransactionCreateManyWithoutUserInput {
 
 input TransactionCreateWithoutPostInput {
   id: ID
-  amount: Float!
+  amount: Int!
   budgetType: BudgetType!
   user: UserCreateOneWithoutTransactionsInput!
   topic: TopicCreateOneWithoutTransactionsInput
@@ -1806,7 +1806,7 @@ input TransactionCreateWithoutPostInput {
 
 input TransactionCreateWithoutTopicInput {
   id: ID
-  amount: Float!
+  amount: Int!
   budgetType: BudgetType!
   user: UserCreateOneWithoutTransactionsInput!
   post: PostCreateOneWithoutTransactionsInput
@@ -1814,7 +1814,7 @@ input TransactionCreateWithoutTopicInput {
 
 input TransactionCreateWithoutUserInput {
   id: ID
-  amount: Float!
+  amount: Int!
   budgetType: BudgetType!
   topic: TopicCreateOneWithoutTransactionsInput
   post: PostCreateOneWithoutTransactionsInput
@@ -1840,7 +1840,7 @@ enum TransactionOrderByInput {
 
 type TransactionPreviousValues {
   id: ID!
-  amount: Float!
+  amount: Int!
   budgetType: BudgetType!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1861,14 +1861,14 @@ input TransactionScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  amount: Float
-  amount_not: Float
-  amount_in: [Float!]
-  amount_not_in: [Float!]
-  amount_lt: Float
-  amount_lte: Float
-  amount_gt: Float
-  amount_gte: Float
+  amount: Int
+  amount_not: Int
+  amount_in: [Int!]
+  amount_not_in: [Int!]
+  amount_lt: Int
+  amount_lte: Int
+  amount_gt: Int
+  amount_gte: Int
   budgetType: BudgetType
   budgetType_not: BudgetType
   budgetType_in: [BudgetType!]
@@ -1913,7 +1913,7 @@ input TransactionSubscriptionWhereInput {
 }
 
 input TransactionUpdateInput {
-  amount: Float
+  amount: Int
   budgetType: BudgetType
   user: UserUpdateOneRequiredWithoutTransactionsInput
   topic: TopicUpdateOneWithoutTransactionsInput
@@ -1921,12 +1921,12 @@ input TransactionUpdateInput {
 }
 
 input TransactionUpdateManyDataInput {
-  amount: Float
+  amount: Int
   budgetType: BudgetType
 }
 
 input TransactionUpdateManyMutationInput {
-  amount: Float
+  amount: Int
   budgetType: BudgetType
 }
 
@@ -1972,21 +1972,21 @@ input TransactionUpdateManyWithWhereNestedInput {
 }
 
 input TransactionUpdateWithoutPostDataInput {
-  amount: Float
+  amount: Int
   budgetType: BudgetType
   user: UserUpdateOneRequiredWithoutTransactionsInput
   topic: TopicUpdateOneWithoutTransactionsInput
 }
 
 input TransactionUpdateWithoutTopicDataInput {
-  amount: Float
+  amount: Int
   budgetType: BudgetType
   user: UserUpdateOneRequiredWithoutTransactionsInput
   post: PostUpdateOneWithoutTransactionsInput
 }
 
 input TransactionUpdateWithoutUserDataInput {
-  amount: Float
+  amount: Int
   budgetType: BudgetType
   topic: TopicUpdateOneWithoutTransactionsInput
   post: PostUpdateOneWithoutTransactionsInput
@@ -2040,14 +2040,14 @@ input TransactionWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  amount: Float
-  amount_not: Float
-  amount_in: [Float!]
-  amount_not_in: [Float!]
-  amount_lt: Float
-  amount_lte: Float
-  amount_gt: Float
-  amount_gte: Float
+  amount: Int
+  amount_not: Int
+  amount_in: [Int!]
+  amount_not_in: [Int!]
+  amount_lt: Int
+  amount_lte: Int
+  amount_gt: Int
+  amount_gte: Int
   budgetType: BudgetType
   budgetType_not: BudgetType
   budgetType_in: [BudgetType!]

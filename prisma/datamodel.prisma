@@ -24,7 +24,7 @@ type User {
 
 type Transaction {
   id: ID! @id
-  amount: Float!
+  amount: Int!
   budgetType: BudgetType!
   user: User! @relation(name: "TransactionToUser", onDelete: SET_NULL)
   topic: Topic @relation(name: "TransactionToTopic", onDelete: SET_NULL)
