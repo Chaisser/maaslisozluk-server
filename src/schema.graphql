@@ -1,7 +1,7 @@
 type Query {
   users(query: String): [User!]!
   user(id: ID!): User!
-  author(username: String!): User!
+  author(username: String!): User
   checkToken(token: String!): User!
   checkUsername(username: String!): User
   categories(first: Int): [Category!]!
@@ -138,6 +138,7 @@ type Post {
   description: String!
   topic: Topic!
   user: User!
+  isEditable: Boolean
   favorites: [Favorite!]!
   likes: [Like!]!
   favoritesPaidTimes: Int!

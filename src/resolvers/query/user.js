@@ -13,6 +13,16 @@ const userQuery = {
       info
     );
   },
+  author(parent, args, { prisma, request }, info) {
+    return prisma.query.user(
+      {
+        where: {
+          username: args.username,
+        },
+      },
+      info
+    );
+  },
   checkUsername(parent, args, { prisma, request }, info) {
     const username = args.username;
     return prisma.query.user(

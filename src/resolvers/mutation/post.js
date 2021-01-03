@@ -21,10 +21,20 @@ const postMutation = {
       info
     );
   },
-  updatePost(parent, args, { request, prisma }, info) {
+  async updatePost(parent, args, { request, prisma }, info) {
     const user = getUser(request);
     const userType = user.userType;
-    //TO-DO check if this post has user.
+    const userId = user.userId;
+
+    const isExist = await prisma.exists.Post({
+      id: args.id,
+      user: {
+        id: userId,
+      },
+    });
+    if (!isExist) {
+      throw new Error("Permission denied");
+    }
 
     const data = {};
 
