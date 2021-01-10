@@ -45,6 +45,23 @@ const postQuery = {
     );
     return result;
   },
+  async checkFavorite(parent, args, { prisma, request }, info) {
+    const postId = args.id;
+    const user = getUserId(request);
+    const userId = user.userId;
+
+    const favExists = await prisma.exists.Favorite({
+      user: {
+        id: userId,
+      },
+      post: {
+        id: postId,
+      },
+    });
+    return {
+      result: favExists,
+    };
+  },
 };
 
 export default postQuery;

@@ -6,12 +6,14 @@ type Query {
   checkUsername(username: String!): User
   categories(first: Int): [Category!]!
   category(id: ID!): Category!
-  topics: [Topic!]!
+  topics(category: String): [Topic!]!
   authorTopics(user: String!): [Topic!]!
   authorPosts(user: String!): [Post!]!
   topic(slug: String!): Topic
+
   posts(topic: ID!): [Post!]!
   post(id: ID!): Post!
+  checkFavorite(id: ID!): BooleanPayload!
 }
 
 type Mutation {
@@ -31,6 +33,16 @@ type Mutation {
   createPost(data: CreatePostInput!, topic: String!): Post!
   updatePost(data: UpdatePostInput, id: ID!): Post!
   deletePost(id: ID!): Post!
+  favoritePost(id: ID!): ResultPayload!
+  likePost(id: ID!, likeType: LikeType): Post!
+}
+
+type ResultPayload {
+  result: String!
+}
+
+type BooleanPayload {
+  result: Boolean!
 }
 
 type AuthPayload {
@@ -48,6 +60,7 @@ type User {
   id: ID!
   username: String!
   email: String!
+  password: String!
   city: String
   agreement: String!
   agreementVersion: Float!
@@ -129,6 +142,7 @@ input CreateTopicInput {
   title: String!
   description: String!
 }
+
 input UpdateTopicInput {
   title: String!
 }
@@ -138,7 +152,9 @@ type Post {
   description: String!
   topic: Topic!
   user: User!
+  likesCount: Int
   isEditable: Boolean
+  userLiked: String
   favorites: [Favorite!]!
   likes: [Like!]!
   favoritesPaidTimes: Int!

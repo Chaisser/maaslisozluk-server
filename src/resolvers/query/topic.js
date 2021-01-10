@@ -1,6 +1,16 @@
 const topicQuery = {
   topics(parent, args, { prisma }, info) {
-    return prisma.query.topics({ orderBy: "updatedAt_DESC" }, info);
+    const opArgs = {
+      orderBy: "updatedAt_DESC",
+    };
+    if (args.category) {
+      opArgs.where = {
+        category: {
+          slug: args.category,
+        },
+      };
+    }
+    return prisma.query.topics(opArgs, info);
   },
   topic(parent, args, { prisma }, info) {
     return prisma.query.topic(

@@ -2,7 +2,6 @@ import getSlug from "speakingurl";
 
 const categoryMutation = {
   createCategory(parent, args, { prisma, request }, info) {
-    console.log("buraya geldi");
     const { title, description } = args.data;
     const slug = getSlug(title);
     return prisma.mutation.createCategory(
