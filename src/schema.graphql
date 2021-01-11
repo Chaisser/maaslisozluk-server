@@ -60,7 +60,7 @@ type User {
   id: ID!
   username: String!
   email: String!
-  # password: String!
+  password: String!
   city: String
   agreement: String!
   agreementVersion: Float!
