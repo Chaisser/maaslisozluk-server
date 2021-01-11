@@ -166,6 +166,7 @@ type Post {
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
   transactions: [Transaction!]!
+  totalEarnings: Int!
   createdAt: String!
   updatedAt: String!
 }

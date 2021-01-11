@@ -1,4 +1,5 @@
 import getUserId from "./../utils/getUserId";
+import _ from "lodash";
 
 const Post = {
   isEditable: {
@@ -14,6 +15,22 @@ const Post = {
         return true;
       }
       return false;
+    },
+  },
+  totalEarnings: {
+    async resolve(parent, args, { request, prisma }, info) {
+      const transactions = await prisma.query.transactions(
+        {
+          where: {
+            post: {
+              id: parent.id,
+            },
+          },
+        },
+        `{id amount}`
+      );
+
+      return _.sumBy(transactions, "amount");
     },
   },
   likesCount: {

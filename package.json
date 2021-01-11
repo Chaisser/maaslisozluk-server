@@ -20,6 +20,7 @@
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "nodemon": "^2.0.6",
     "prisma-binding": "^2.3.16",
