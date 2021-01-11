@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import getUserId from "./../../utils/getUserId";
 const userQuery = {
   users(parent, args, { prisma, request }, info) {
     return prisma.query.users({}, info);
@@ -52,6 +53,25 @@ const userQuery = {
       throw new Error("USER_NOT_FOUND");
     }
     return user;
+  },
+  async getBudget(parent, args, { prisma, request }, info) {
+    const user = getUserId(request);
+    const id = user.userId;
+
+    const result = await prisma.query.user(
+      {
+        where: {
+          id,
+        },
+      },
+      `{
+      id 
+      budget
+    }`
+    );
+    return {
+      result: result.budget,
+    };
   },
 };
 

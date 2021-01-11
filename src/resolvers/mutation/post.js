@@ -206,6 +206,28 @@ const postMutation = {
     }
 
     if (isPayable) {
+      const author = await prisma.query.user(
+        {
+          where: {
+            id: post.user.id,
+          },
+        },
+        `{
+        id 
+        budget
+      }`
+      );
+
+      const authorBudget = author.budget;
+      const updateAuthor = await prisma.mutation.updateUser({
+        where: {
+          id: post.user.id,
+        },
+        data: {
+          budget: authorBudget + amount,
+        },
+      });
+
       const addTransaction = await prisma.mutation.createTransaction({
         data: {
           amount,

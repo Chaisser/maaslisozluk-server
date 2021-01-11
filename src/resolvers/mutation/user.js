@@ -2,6 +2,7 @@ import generateToken from "./../../utils/generateToken";
 import hashPassword from "./../../utils/hashPassword";
 import bcrypt from "bcryptjs";
 import generateCode from "./../../utils/generateCode";
+import getUserId from "./../../utils/getUserId";
 
 const userMutation = {
   async loginUser(parent, args, { prisma }, info) {

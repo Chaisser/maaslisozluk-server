@@ -2094,7 +2094,7 @@ type User {
   twoFactorCode: String!
   twoFactorActivation: Boolean!
   theme: Theme!
-  budget: Float!
+  budget: Int!
   topics(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Topic!]
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction!]
@@ -2124,7 +2124,7 @@ input UserCreateInput {
   twoFactorCode: String!
   twoFactorActivation: Boolean!
   theme: Theme!
-  budget: Float!
+  budget: Int!
   topics: TopicCreateManyWithoutUserInput
   posts: PostCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
@@ -2171,7 +2171,7 @@ input UserCreateWithoutFavoritesInput {
   twoFactorCode: String!
   twoFactorActivation: Boolean!
   theme: Theme!
-  budget: Float!
+  budget: Int!
   topics: TopicCreateManyWithoutUserInput
   posts: PostCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
@@ -2192,7 +2192,7 @@ input UserCreateWithoutLikesInput {
   twoFactorCode: String!
   twoFactorActivation: Boolean!
   theme: Theme!
-  budget: Float!
+  budget: Int!
   topics: TopicCreateManyWithoutUserInput
   posts: PostCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
@@ -2213,7 +2213,7 @@ input UserCreateWithoutPostsInput {
   twoFactorCode: String!
   twoFactorActivation: Boolean!
   theme: Theme!
-  budget: Float!
+  budget: Int!
   topics: TopicCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
   likes: LikeCreateManyWithoutUserInput
@@ -2234,7 +2234,7 @@ input UserCreateWithoutTopicsInput {
   twoFactorCode: String!
   twoFactorActivation: Boolean!
   theme: Theme!
-  budget: Float!
+  budget: Int!
   posts: PostCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
   likes: LikeCreateManyWithoutUserInput
@@ -2255,7 +2255,7 @@ input UserCreateWithoutTransactionsInput {
   twoFactorCode: String!
   twoFactorActivation: Boolean!
   theme: Theme!
-  budget: Float!
+  budget: Int!
   topics: TopicCreateManyWithoutUserInput
   posts: PostCreateManyWithoutUserInput
   likes: LikeCreateManyWithoutUserInput
@@ -2316,7 +2316,7 @@ type UserPreviousValues {
   twoFactorCode: String!
   twoFactorActivation: Boolean!
   theme: Theme!
-  budget: Float!
+  budget: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2361,7 +2361,7 @@ input UserUpdateInput {
   twoFactorCode: String
   twoFactorActivation: Boolean
   theme: Theme
-  budget: Float
+  budget: Int
   topics: TopicUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
@@ -2382,7 +2382,7 @@ input UserUpdateManyMutationInput {
   twoFactorCode: String
   twoFactorActivation: Boolean
   theme: Theme
-  budget: Float
+  budget: Int
 }
 
 input UserUpdateOneRequiredWithoutFavoritesInput {
@@ -2435,7 +2435,7 @@ input UserUpdateWithoutFavoritesDataInput {
   twoFactorCode: String
   twoFactorActivation: Boolean
   theme: Theme
-  budget: Float
+  budget: Int
   topics: TopicUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
@@ -2455,7 +2455,7 @@ input UserUpdateWithoutLikesDataInput {
   twoFactorCode: String
   twoFactorActivation: Boolean
   theme: Theme
-  budget: Float
+  budget: Int
   topics: TopicUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
@@ -2475,7 +2475,7 @@ input UserUpdateWithoutPostsDataInput {
   twoFactorCode: String
   twoFactorActivation: Boolean
   theme: Theme
-  budget: Float
+  budget: Int
   topics: TopicUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
   likes: LikeUpdateManyWithoutUserInput
@@ -2495,7 +2495,7 @@ input UserUpdateWithoutTopicsDataInput {
   twoFactorCode: String
   twoFactorActivation: Boolean
   theme: Theme
-  budget: Float
+  budget: Int
   posts: PostUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
   likes: LikeUpdateManyWithoutUserInput
@@ -2515,7 +2515,7 @@ input UserUpdateWithoutTransactionsDataInput {
   twoFactorCode: String
   twoFactorActivation: Boolean
   theme: Theme
-  budget: Float
+  budget: Int
   topics: TopicUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   likes: LikeUpdateManyWithoutUserInput
@@ -2680,14 +2680,14 @@ input UserWhereInput {
   theme_not: Theme
   theme_in: [Theme!]
   theme_not_in: [Theme!]
-  budget: Float
-  budget_not: Float
-  budget_in: [Float!]
-  budget_not_in: [Float!]
-  budget_lt: Float
-  budget_lte: Float
-  budget_gt: Float
-  budget_gte: Float
+  budget: Int
+  budget_not: Int
+  budget_in: [Int!]
+  budget_not_in: [Int!]
+  budget_lt: Int
+  budget_lte: Int
+  budget_gt: Int
+  budget_gte: Int
   topics_every: TopicWhereInput
   topics_some: TopicWhereInput
   topics_none: TopicWhereInput

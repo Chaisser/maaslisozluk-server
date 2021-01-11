@@ -12,7 +12,7 @@ type User {
   twoFactorCode: String!
   twoFactorActivation: Boolean!
   theme: Theme!
-  budget: Float!
+  budget: Int!
   topics: [Topic!]! @relation(name: "UserToTopic", onDelete: SET_NULL)
   posts: [Post!]! @relation(name: "UserToPost", onDelete: CASCADE)
   transactions: [Transaction!]! @relation(name: "TransactionToUser", onDelete: SET_NULL)
