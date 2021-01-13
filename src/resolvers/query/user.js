@@ -54,6 +54,23 @@ const userQuery = {
     }
     return user;
   },
+  async getTransactions(parent, args, { prisma, request }, info) {
+    const user = getUserId(request);
+    const id = user.userId;
+
+    const result = await prisma.query.transactions(
+      {
+        orderBy: "createdAt_DESC",
+        where: {
+          user: {
+            id,
+          },
+        },
+      },
+      info
+    );
+    return result;
+  },
   async getBudget(parent, args, { prisma, request }, info) {
     const user = getUserId(request);
     const id = user.userId;

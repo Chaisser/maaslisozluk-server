@@ -3,6 +3,7 @@ import hashPassword from "./../../utils/hashPassword";
 import bcrypt from "bcryptjs";
 import generateCode from "./../../utils/generateCode";
 import getUserId from "./../../utils/getUserId";
+import { sendWelcomeEmail } from "./../../email/email";
 
 const userMutation = {
   async loginUser(parent, args, { prisma }, info) {
@@ -39,6 +40,7 @@ const userMutation = {
 
     const emailActivationCode = generateCode(100000, 999999);
     const twoFactorCode = generateCode(100000, 999999);
+    const phoneNumberActivationCode = generateCode(100000, 999999);
 
     const userType = "USER";
     const theme = "LIGHT";
@@ -48,6 +50,8 @@ const userMutation = {
         data: {
           ...args.data,
           userType,
+          phoneNumberActivation: false,
+          phoneNumberActivationCode,
           emailActivationCode,
           emailActivation: false,
           twoFactorCode,
@@ -60,6 +64,8 @@ const userMutation = {
       },
       null
     );
+    const sendWelcome = sendWelcomeEmail(args.data.email, emailActivationCode);
+
     return {
       user,
       token: generateToken(user.id, user.userType),

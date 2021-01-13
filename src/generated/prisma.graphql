@@ -2084,11 +2084,14 @@ type User {
   id: ID!
   username: String!
   email: String!
+  phoneNumber: String
   city: String
   password: String!
   userType: UserType!
   agreement: String!
   agreementVersion: Float!
+  phoneNumberActivationCode: String!
+  phoneNumberActivation: Boolean!
   emailActivationCode: String!
   emailActivation: Boolean!
   twoFactorCode: String!
@@ -2114,11 +2117,14 @@ input UserCreateInput {
   id: ID
   username: String!
   email: String!
+  phoneNumber: String
   city: String
   password: String!
   userType: UserType!
   agreement: String!
   agreementVersion: Float!
+  phoneNumberActivationCode: String!
+  phoneNumberActivation: Boolean!
   emailActivationCode: String!
   emailActivation: Boolean!
   twoFactorCode: String!
@@ -2161,11 +2167,14 @@ input UserCreateWithoutFavoritesInput {
   id: ID
   username: String!
   email: String!
+  phoneNumber: String
   city: String
   password: String!
   userType: UserType!
   agreement: String!
   agreementVersion: Float!
+  phoneNumberActivationCode: String!
+  phoneNumberActivation: Boolean!
   emailActivationCode: String!
   emailActivation: Boolean!
   twoFactorCode: String!
@@ -2182,11 +2191,14 @@ input UserCreateWithoutLikesInput {
   id: ID
   username: String!
   email: String!
+  phoneNumber: String
   city: String
   password: String!
   userType: UserType!
   agreement: String!
   agreementVersion: Float!
+  phoneNumberActivationCode: String!
+  phoneNumberActivation: Boolean!
   emailActivationCode: String!
   emailActivation: Boolean!
   twoFactorCode: String!
@@ -2203,11 +2215,14 @@ input UserCreateWithoutPostsInput {
   id: ID
   username: String!
   email: String!
+  phoneNumber: String
   city: String
   password: String!
   userType: UserType!
   agreement: String!
   agreementVersion: Float!
+  phoneNumberActivationCode: String!
+  phoneNumberActivation: Boolean!
   emailActivationCode: String!
   emailActivation: Boolean!
   twoFactorCode: String!
@@ -2224,11 +2239,14 @@ input UserCreateWithoutTopicsInput {
   id: ID
   username: String!
   email: String!
+  phoneNumber: String
   city: String
   password: String!
   userType: UserType!
   agreement: String!
   agreementVersion: Float!
+  phoneNumberActivationCode: String!
+  phoneNumberActivation: Boolean!
   emailActivationCode: String!
   emailActivation: Boolean!
   twoFactorCode: String!
@@ -2245,11 +2263,14 @@ input UserCreateWithoutTransactionsInput {
   id: ID
   username: String!
   email: String!
+  phoneNumber: String
   city: String
   password: String!
   userType: UserType!
   agreement: String!
   agreementVersion: Float!
+  phoneNumberActivationCode: String!
+  phoneNumberActivation: Boolean!
   emailActivationCode: String!
   emailActivation: Boolean!
   twoFactorCode: String!
@@ -2274,6 +2295,8 @@ enum UserOrderByInput {
   username_DESC
   email_ASC
   email_DESC
+  phoneNumber_ASC
+  phoneNumber_DESC
   city_ASC
   city_DESC
   password_ASC
@@ -2284,6 +2307,10 @@ enum UserOrderByInput {
   agreement_DESC
   agreementVersion_ASC
   agreementVersion_DESC
+  phoneNumberActivationCode_ASC
+  phoneNumberActivationCode_DESC
+  phoneNumberActivation_ASC
+  phoneNumberActivation_DESC
   emailActivationCode_ASC
   emailActivationCode_DESC
   emailActivation_ASC
@@ -2306,11 +2333,14 @@ type UserPreviousValues {
   id: ID!
   username: String!
   email: String!
+  phoneNumber: String
   city: String
   password: String!
   userType: UserType!
   agreement: String!
   agreementVersion: Float!
+  phoneNumberActivationCode: String!
+  phoneNumberActivation: Boolean!
   emailActivationCode: String!
   emailActivation: Boolean!
   twoFactorCode: String!
@@ -2343,6 +2373,7 @@ enum UserType {
   ADMIN
   MODERATOR
   SUBSCRIBER
+  PAYABLEUSER
   USER
   PASSIVE
   BANNED
@@ -2351,11 +2382,14 @@ enum UserType {
 input UserUpdateInput {
   username: String
   email: String
+  phoneNumber: String
   city: String
   password: String
   userType: UserType
   agreement: String
   agreementVersion: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivation: Boolean
   emailActivationCode: String
   emailActivation: Boolean
   twoFactorCode: String
@@ -2372,11 +2406,14 @@ input UserUpdateInput {
 input UserUpdateManyMutationInput {
   username: String
   email: String
+  phoneNumber: String
   city: String
   password: String
   userType: UserType
   agreement: String
   agreementVersion: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivation: Boolean
   emailActivationCode: String
   emailActivation: Boolean
   twoFactorCode: String
@@ -2425,11 +2462,14 @@ input UserUpdateOneWithoutTopicsInput {
 input UserUpdateWithoutFavoritesDataInput {
   username: String
   email: String
+  phoneNumber: String
   city: String
   password: String
   userType: UserType
   agreement: String
   agreementVersion: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivation: Boolean
   emailActivationCode: String
   emailActivation: Boolean
   twoFactorCode: String
@@ -2445,11 +2485,14 @@ input UserUpdateWithoutFavoritesDataInput {
 input UserUpdateWithoutLikesDataInput {
   username: String
   email: String
+  phoneNumber: String
   city: String
   password: String
   userType: UserType
   agreement: String
   agreementVersion: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivation: Boolean
   emailActivationCode: String
   emailActivation: Boolean
   twoFactorCode: String
@@ -2465,11 +2508,14 @@ input UserUpdateWithoutLikesDataInput {
 input UserUpdateWithoutPostsDataInput {
   username: String
   email: String
+  phoneNumber: String
   city: String
   password: String
   userType: UserType
   agreement: String
   agreementVersion: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivation: Boolean
   emailActivationCode: String
   emailActivation: Boolean
   twoFactorCode: String
@@ -2485,11 +2531,14 @@ input UserUpdateWithoutPostsDataInput {
 input UserUpdateWithoutTopicsDataInput {
   username: String
   email: String
+  phoneNumber: String
   city: String
   password: String
   userType: UserType
   agreement: String
   agreementVersion: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivation: Boolean
   emailActivationCode: String
   emailActivation: Boolean
   twoFactorCode: String
@@ -2505,11 +2554,14 @@ input UserUpdateWithoutTopicsDataInput {
 input UserUpdateWithoutTransactionsDataInput {
   username: String
   email: String
+  phoneNumber: String
   city: String
   password: String
   userType: UserType
   agreement: String
   agreementVersion: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivation: Boolean
   emailActivationCode: String
   emailActivation: Boolean
   twoFactorCode: String
@@ -2590,6 +2642,20 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  phoneNumber: String
+  phoneNumber_not: String
+  phoneNumber_in: [String!]
+  phoneNumber_not_in: [String!]
+  phoneNumber_lt: String
+  phoneNumber_lte: String
+  phoneNumber_gt: String
+  phoneNumber_gte: String
+  phoneNumber_contains: String
+  phoneNumber_not_contains: String
+  phoneNumber_starts_with: String
+  phoneNumber_not_starts_with: String
+  phoneNumber_ends_with: String
+  phoneNumber_not_ends_with: String
   city: String
   city_not: String
   city_in: [String!]
@@ -2644,6 +2710,22 @@ input UserWhereInput {
   agreementVersion_lte: Float
   agreementVersion_gt: Float
   agreementVersion_gte: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivationCode_not: String
+  phoneNumberActivationCode_in: [String!]
+  phoneNumberActivationCode_not_in: [String!]
+  phoneNumberActivationCode_lt: String
+  phoneNumberActivationCode_lte: String
+  phoneNumberActivationCode_gt: String
+  phoneNumberActivationCode_gte: String
+  phoneNumberActivationCode_contains: String
+  phoneNumberActivationCode_not_contains: String
+  phoneNumberActivationCode_starts_with: String
+  phoneNumberActivationCode_not_starts_with: String
+  phoneNumberActivationCode_ends_with: String
+  phoneNumberActivationCode_not_ends_with: String
+  phoneNumberActivation: Boolean
+  phoneNumberActivation_not: Boolean
   emailActivationCode: String
   emailActivationCode_not: String
   emailActivationCode_in: [String!]
@@ -2728,4 +2810,5 @@ input UserWhereUniqueInput {
   id: ID
   username: String
   email: String
+  phoneNumber: String
 }

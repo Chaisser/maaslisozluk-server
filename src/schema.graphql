@@ -2,6 +2,7 @@ type Query {
   users(query: String): [User!]!
   user(id: ID!): User!
   getBudget: BudgetPayload!
+  getTransactions: [Transaction!]!
   author(username: String!): User
   checkToken(token: String!): User!
   checkUsername(username: String!): User
@@ -67,8 +68,10 @@ type User {
   email: String!
   # password: String!
   city: String
+  phoneNumber: String
   agreement: String!
   agreementVersion: Float!
+  phoneNumberActivation: Boolean!
   emailActivation: Boolean!
   twoFactorActivation: Boolean!
   topicsCount: Int
@@ -88,12 +91,14 @@ input CreateUserInput {
   username: String!
   email: String!
   city: String
+  phoneNumber: String
   password: String!
 }
 
 input UpdateUserInput {
   email: String
   city: String
+  phoneNumber: String
   password: String
 }
 
