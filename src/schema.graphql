@@ -1,9 +1,11 @@
 type Query {
   users(query: String): [User!]!
   user(id: ID!): User!
+  me: User!
   getBudget: BudgetPayload!
   getTransactions: [Transaction!]!
   author(username: String!): User
+  currency: Currency
   checkToken(token: String!): User!
   checkUsername(username: String!): User
   categories(first: Int): [Category!]!
@@ -23,6 +25,7 @@ type Mutation {
   updateUser(data: UpdateUserInput, id: ID!): User!
   deleteUser(id: ID!): User!
   loginUser(data: LoginUserInput!): AuthPayload!
+  changePassword(data: ChangePasswordInput): User!
 
   createCategory(data: CreateCategoryInput!): Category!
   updateCategory(data: UpdateCategoryInput, id: ID!): Category!
@@ -66,7 +69,6 @@ type User {
   id: ID!
   username: String!
   email: String!
-  # password: String!
   city: String
   phoneNumber: String
   agreement: String!
@@ -100,6 +102,12 @@ input UpdateUserInput {
   city: String
   phoneNumber: String
   password: String
+}
+
+input ChangePasswordInput {
+  currentPassword: String!
+  password: String!
+  rePassword: String!
 }
 
 type Transaction {
@@ -201,6 +209,14 @@ type Like {
   updatedAt: String!
 }
 
+type Currency {
+  id: ID!
+  usDollar: Float!
+  turkishLira: Float!
+  createdAt: String!
+  updatedAt: String!
+}
+
 enum LikeType {
   LIKE
   DISLIKE
@@ -227,6 +243,7 @@ enum UserType {
   ADMIN
   MODERATOR
   SUBSCRIBER
+  PAYABLEUSER
   USER
   PASSIVE
   BANNED

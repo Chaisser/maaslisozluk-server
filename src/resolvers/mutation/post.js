@@ -9,6 +9,10 @@ const postMutation = {
     const user = getUser(request);
     const userId = user.userId;
 
+    if (!description.trim() || description.trim().length < 10) {
+      throw new Error("Yazı boş bırakılamaz");
+    }
+
     return prisma.mutation.createPost(
       {
         data: {
@@ -305,7 +309,7 @@ const postMutation = {
             id: post.user.id,
           },
           data: {
-            budget: authorBudget + amount,
+            budget: authorBudget + settings.favouritePaidAmount,
           },
         });
 

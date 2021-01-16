@@ -2,6 +2,10 @@ type AggregateCategory {
   count: Int!
 }
 
+type AggregateCurrency {
+  count: Int!
+}
+
 type AggregateFavorite {
   count: Int!
 }
@@ -233,6 +237,136 @@ input CategoryWhereInput {
 input CategoryWhereUniqueInput {
   id: ID
   slug: String
+}
+
+type Currency {
+  id: ID!
+  usDollar: Float!
+  turkishLira: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CurrencyConnection {
+  pageInfo: PageInfo!
+  edges: [CurrencyEdge]!
+  aggregate: AggregateCurrency!
+}
+
+input CurrencyCreateInput {
+  id: ID
+  usDollar: Float!
+  turkishLira: Float!
+}
+
+type CurrencyEdge {
+  node: Currency!
+  cursor: String!
+}
+
+enum CurrencyOrderByInput {
+  id_ASC
+  id_DESC
+  usDollar_ASC
+  usDollar_DESC
+  turkishLira_ASC
+  turkishLira_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CurrencyPreviousValues {
+  id: ID!
+  usDollar: Float!
+  turkishLira: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CurrencySubscriptionPayload {
+  mutation: MutationType!
+  node: Currency
+  updatedFields: [String!]
+  previousValues: CurrencyPreviousValues
+}
+
+input CurrencySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CurrencyWhereInput
+  AND: [CurrencySubscriptionWhereInput!]
+  OR: [CurrencySubscriptionWhereInput!]
+  NOT: [CurrencySubscriptionWhereInput!]
+}
+
+input CurrencyUpdateInput {
+  usDollar: Float
+  turkishLira: Float
+}
+
+input CurrencyUpdateManyMutationInput {
+  usDollar: Float
+  turkishLira: Float
+}
+
+input CurrencyWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  usDollar: Float
+  usDollar_not: Float
+  usDollar_in: [Float!]
+  usDollar_not_in: [Float!]
+  usDollar_lt: Float
+  usDollar_lte: Float
+  usDollar_gt: Float
+  usDollar_gte: Float
+  turkishLira: Float
+  turkishLira_not: Float
+  turkishLira_in: [Float!]
+  turkishLira_not_in: [Float!]
+  turkishLira_lt: Float
+  turkishLira_lte: Float
+  turkishLira_gt: Float
+  turkishLira_gte: Float
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CurrencyWhereInput!]
+  OR: [CurrencyWhereInput!]
+  NOT: [CurrencyWhereInput!]
+}
+
+input CurrencyWhereUniqueInput {
+  id: ID
 }
 
 scalar DateTime
@@ -710,6 +844,12 @@ type Mutation {
   upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
   deleteCategory(where: CategoryWhereUniqueInput!): Category
   deleteManyCategories(where: CategoryWhereInput): BatchPayload!
+  createCurrency(data: CurrencyCreateInput!): Currency!
+  updateCurrency(data: CurrencyUpdateInput!, where: CurrencyWhereUniqueInput!): Currency
+  updateManyCurrencies(data: CurrencyUpdateManyMutationInput!, where: CurrencyWhereInput): BatchPayload!
+  upsertCurrency(where: CurrencyWhereUniqueInput!, create: CurrencyCreateInput!, update: CurrencyUpdateInput!): Currency!
+  deleteCurrency(where: CurrencyWhereUniqueInput!): Currency
+  deleteManyCurrencies(where: CurrencyWhereInput): BatchPayload!
   createFavorite(data: FavoriteCreateInput!): Favorite!
   updateFavorite(data: FavoriteUpdateInput!, where: FavoriteWhereUniqueInput!): Favorite
   upsertFavorite(where: FavoriteWhereUniqueInput!, create: FavoriteCreateInput!, update: FavoriteUpdateInput!): Favorite!
@@ -1270,6 +1410,9 @@ type Query {
   category(where: CategoryWhereUniqueInput!): Category
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
   categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
+  currency(where: CurrencyWhereUniqueInput!): Currency
+  currencies(where: CurrencyWhereInput, orderBy: CurrencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Currency]!
+  currenciesConnection(where: CurrencyWhereInput, orderBy: CurrencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CurrencyConnection!
   favorite(where: FavoriteWhereUniqueInput!): Favorite
   favorites(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Favorite]!
   favoritesConnection(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FavoriteConnection!
@@ -1293,6 +1436,7 @@ type Query {
 
 type Subscription {
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
+  currency(where: CurrencySubscriptionWhereInput): CurrencySubscriptionPayload
   favorite(where: FavoriteSubscriptionWhereInput): FavoriteSubscriptionPayload
   like(where: LikeSubscriptionWhereInput): LikeSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload

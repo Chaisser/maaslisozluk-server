@@ -1,7 +1,14 @@
 import { GraphQLServer } from "graphql-yoga";
 import { resolvers, fragmentReplacements } from "./resolvers/index";
 import prisma from "./prisma";
-//https://api.coindesk.com/v1/bpi/currentprice/TRY.json
+import cron from "node-cron";
+import fetchCurrency from "./utils/fetchCurrency";
+
+cron.schedule("30 * * * *", () => {
+  fetchCurrency();
+  console.log("currency has updated!");
+});
+
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",
   resolvers,

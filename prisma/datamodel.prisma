@@ -91,6 +91,14 @@ type Like {
   updatedAt: DateTime! @updatedAt
 }
 
+type Currency {
+  id: ID! @id
+  usDollar: Float!
+  turkishLira: Float!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
 enum LikeType {
   LIKE
   DISLIKE

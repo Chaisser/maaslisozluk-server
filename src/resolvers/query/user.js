@@ -14,6 +14,19 @@ const userQuery = {
       info
     );
   },
+  me(parent, args, { prisma, request }, info) {
+    const user = getUserId(request);
+    const userId = user.userId;
+
+    return prisma.query.user(
+      {
+        where: {
+          id: userId,
+        },
+      },
+      info
+    );
+  },
   author(parent, args, { prisma, request }, info) {
     return prisma.query.user(
       {

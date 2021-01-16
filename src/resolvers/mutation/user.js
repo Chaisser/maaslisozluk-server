@@ -38,6 +38,30 @@ const userMutation = {
   async createUser(parent, args, { prisma, request }, info) {
     args.data.password = await hashPassword(args.data.password);
 
+    if (args.data.username.length < 4 || args.data.username.length > 24) {
+      throw new Error("Kullanıcı adı en az 4 en fazla 24 karakter olabilir");
+    }
+
+    const forbiddenUsernames = [
+      "admin",
+      "administrator",
+      "interaktifis",
+      "maaslisozluk",
+      "mod",
+      "moderator",
+      "owner",
+      "root",
+      "superadmin",
+      "supermoderator",
+      "superuser",
+    ];
+
+    const isUsernameValid = forbiddenUsernames.find((u) => u === args.data.username);
+
+    if (isUsernameValid) {
+      throw new Error("Bu kullanıcı adı alınamaz");
+    }
+
     const emailActivationCode = generateCode(100000, 999999);
     const twoFactorCode = generateCode(100000, 999999);
     const phoneNumberActivationCode = generateCode(100000, 999999);
