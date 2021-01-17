@@ -10,7 +10,7 @@ type Query {
   checkUsername(username: String!): User
   categories(first: Int): [Category!]!
   category(id: ID!): Category!
-  topics(category: String): [Topic!]!
+  topics(category: String, skip: Int, first: Int, orderBy: String): TopicsPayload!
   authorTopics(user: String!): [Topic!]!
   authorPosts(user: String!): [Post!]!
   topic(slug: String!): Topic
@@ -40,6 +40,11 @@ type Mutation {
   deletePost(id: ID!): Post!
   favoritePost(id: ID!): ResultPayload!
   likePost(id: ID!, likeType: LikeType): Post!
+}
+
+type TopicsPayload {
+  topics: [Topic!]!
+  totalTopic: Int!
 }
 
 type BudgetPayload {

@@ -1,8 +1,15 @@
 const topicQuery = {
-  topics(parent, args, { prisma }, info) {
+  async topics(parent, args, { prisma }, info) {
+    const skip = args.skip ? args.skip : 0;
+    const first = args.first ? args.first : 150;
+    const orderBy = args.orderBy ? args.orderBy : "updatedAt_DESC";
+
     const opArgs = {
-      orderBy: "updatedAt_DESC",
+      orderBy,
+      skip,
+      first,
     };
+
     if (args.category) {
       opArgs.where = {
         category: {
@@ -10,7 +17,35 @@ const topicQuery = {
         },
       };
     }
-    return prisma.query.topics(opArgs, info);
+    const topics = await prisma.query.topics(
+      opArgs,
+      `
+    {
+      id
+      title
+      slug
+      createdAt
+      updatedAt
+    }
+    `
+    );
+
+    delete opArgs.skip;
+    delete opArgs.first;
+
+    const totalTopic = await prisma.query.topicsConnection(
+      opArgs,
+      `{
+      aggregate { 
+        count
+      }
+    }`
+    );
+
+    return {
+      topics,
+      totalTopic: totalTopic.aggregate.count,
+    };
   },
   topic(parent, args, { prisma }, info) {
     return prisma.query.topic(
