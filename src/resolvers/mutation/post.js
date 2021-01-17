@@ -4,6 +4,7 @@ import settings from "./../../utils/settings";
 
 const postMutation = {
   createPost(parent, args, { request, prisma }, info) {
+    console.log(args, "ARGS");
     const slug = args.topic;
     const { description } = args.data;
     const user = getUser(request);
@@ -22,6 +23,7 @@ const postMutation = {
           dislikesPaidTimes: 0,
           user: { connect: { id: userId } },
           topic: { connect: { slug } },
+          status: args.data.status ? args.data.status : "ACTIVE",
         },
       },
       info

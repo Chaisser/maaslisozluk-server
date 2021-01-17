@@ -28,6 +28,7 @@ const topicMutation = {
           likesPaidTimes: 0,
           dislikesPaidTimes: 0,
           user: { connect: { id: userId } },
+          status: "ACTIVE",
         },
       },
     };

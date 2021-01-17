@@ -13,9 +13,9 @@ type Query {
   topics(category: String, skip: Int, first: Int, orderBy: String): TopicsPayload!
   authorTopics(user: String!): [Topic!]!
   authorPosts(user: String!): [Post!]!
-  topic(slug: String!): Topic
+  topic(slug: String!, skip: Int, first: Int): Topic
 
-  posts(topic: ID!): [Post!]!
+  posts(topic: ID!, first: Int): [Post!]!
   post(id: ID!): Post!
   checkFavorite(id: ID!): BooleanPayload!
 }
@@ -152,7 +152,7 @@ type Topic {
   slug: String!
   category: Category!
   user: User
-  posts: [Post!]!
+  posts(first: Int, skip: Int): [Post!]!
   transactions: [Transaction!]!
   paidTimes: Int!
   postsCount: Int
@@ -191,6 +191,7 @@ type Post {
 
 input CreatePostInput {
   description: String!
+  status: PostStatusType
 }
 
 input UpdatePostInput {
@@ -242,6 +243,11 @@ enum BudgetType {
 enum Theme {
   LIGHT
   DARK
+}
+
+enum PostStatusType {
+  DRAFT
+  ACTIVE
 }
 
 enum UserType {

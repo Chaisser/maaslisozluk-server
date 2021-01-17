@@ -915,6 +915,7 @@ type Post {
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
   transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction!]
+  status: PostStatusType!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -936,6 +937,7 @@ input PostCreateInput {
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
   transactions: TransactionCreateManyWithoutPostInput
+  status: PostStatusType!
 }
 
 input PostCreateManyWithoutTopicInput {
@@ -973,6 +975,7 @@ input PostCreateWithoutFavoritesInput {
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
   transactions: TransactionCreateManyWithoutPostInput
+  status: PostStatusType!
 }
 
 input PostCreateWithoutLikesInput {
@@ -985,6 +988,7 @@ input PostCreateWithoutLikesInput {
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
   transactions: TransactionCreateManyWithoutPostInput
+  status: PostStatusType!
 }
 
 input PostCreateWithoutTopicInput {
@@ -997,6 +1001,7 @@ input PostCreateWithoutTopicInput {
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
   transactions: TransactionCreateManyWithoutPostInput
+  status: PostStatusType!
 }
 
 input PostCreateWithoutTransactionsInput {
@@ -1009,6 +1014,7 @@ input PostCreateWithoutTransactionsInput {
   favoritesPaidTimes: Int!
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
+  status: PostStatusType!
 }
 
 input PostCreateWithoutUserInput {
@@ -1021,6 +1027,7 @@ input PostCreateWithoutUserInput {
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
   transactions: TransactionCreateManyWithoutPostInput
+  status: PostStatusType!
 }
 
 type PostEdge {
@@ -1039,6 +1046,8 @@ enum PostOrderByInput {
   likesPaidTimes_DESC
   dislikesPaidTimes_ASC
   dislikesPaidTimes_DESC
+  status_ASC
+  status_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1051,6 +1060,7 @@ type PostPreviousValues {
   favoritesPaidTimes: Int!
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
+  status: PostStatusType!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1108,6 +1118,10 @@ input PostScalarWhereInput {
   dislikesPaidTimes_lte: Int
   dislikesPaidTimes_gt: Int
   dislikesPaidTimes_gte: Int
+  status: PostStatusType
+  status_not: PostStatusType
+  status_in: [PostStatusType!]
+  status_not_in: [PostStatusType!]
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1127,6 +1141,13 @@ input PostScalarWhereInput {
   AND: [PostScalarWhereInput!]
   OR: [PostScalarWhereInput!]
   NOT: [PostScalarWhereInput!]
+}
+
+enum PostStatusType {
+  BANNED
+  DRAFT
+  PASSIVE
+  ACTIVE
 }
 
 type PostSubscriptionPayload {
@@ -1157,6 +1178,7 @@ input PostUpdateInput {
   likesPaidTimes: Int
   dislikesPaidTimes: Int
   transactions: TransactionUpdateManyWithoutPostInput
+  status: PostStatusType
 }
 
 input PostUpdateManyDataInput {
@@ -1164,6 +1186,7 @@ input PostUpdateManyDataInput {
   favoritesPaidTimes: Int
   likesPaidTimes: Int
   dislikesPaidTimes: Int
+  status: PostStatusType
 }
 
 input PostUpdateManyMutationInput {
@@ -1171,6 +1194,7 @@ input PostUpdateManyMutationInput {
   favoritesPaidTimes: Int
   likesPaidTimes: Int
   dislikesPaidTimes: Int
+  status: PostStatusType
 }
 
 input PostUpdateManyWithoutTopicInput {
@@ -1234,6 +1258,7 @@ input PostUpdateWithoutFavoritesDataInput {
   likesPaidTimes: Int
   dislikesPaidTimes: Int
   transactions: TransactionUpdateManyWithoutPostInput
+  status: PostStatusType
 }
 
 input PostUpdateWithoutLikesDataInput {
@@ -1245,6 +1270,7 @@ input PostUpdateWithoutLikesDataInput {
   likesPaidTimes: Int
   dislikesPaidTimes: Int
   transactions: TransactionUpdateManyWithoutPostInput
+  status: PostStatusType
 }
 
 input PostUpdateWithoutTopicDataInput {
@@ -1256,6 +1282,7 @@ input PostUpdateWithoutTopicDataInput {
   likesPaidTimes: Int
   dislikesPaidTimes: Int
   transactions: TransactionUpdateManyWithoutPostInput
+  status: PostStatusType
 }
 
 input PostUpdateWithoutTransactionsDataInput {
@@ -1267,6 +1294,7 @@ input PostUpdateWithoutTransactionsDataInput {
   favoritesPaidTimes: Int
   likesPaidTimes: Int
   dislikesPaidTimes: Int
+  status: PostStatusType
 }
 
 input PostUpdateWithoutUserDataInput {
@@ -1278,6 +1306,7 @@ input PostUpdateWithoutUserDataInput {
   likesPaidTimes: Int
   dislikesPaidTimes: Int
   transactions: TransactionUpdateManyWithoutPostInput
+  status: PostStatusType
 }
 
 input PostUpdateWithWhereUniqueWithoutTopicInput {
@@ -1381,6 +1410,10 @@ input PostWhereInput {
   transactions_every: TransactionWhereInput
   transactions_some: TransactionWhereInput
   transactions_none: TransactionWhereInput
+  status: PostStatusType
+  status_not: PostStatusType
+  status_in: [PostStatusType!]
+  status_not_in: [PostStatusType!]
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

@@ -70,6 +70,7 @@ type Post {
   likesPaidTimes: Int!
   dislikesPaidTimes: Int!
   transactions: [Transaction!]! @relation(name: "TransactionToPost", onDelete: SET_NULL)
+  status: PostStatusType!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -120,7 +121,12 @@ enum Theme {
   LIGHT
   DARK
 }
-
+enum PostStatusType {
+  BANNED
+  DRAFT
+  PASSIVE
+  ACTIVE
+}
 enum UserType {
   ADMIN
   MODERATOR

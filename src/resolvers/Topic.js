@@ -1,4 +1,9 @@
 const Topic = {
+  // posts: {
+  //   async resolve(parent, args, { request, prisma }, info) {
+  //     console.log(args, "ARGS");
+  //   },
+  // },
   postsCount: {
     async resolve(parent, args, { request, prisma }, info) {
       const result = await prisma.query.postsConnection(
