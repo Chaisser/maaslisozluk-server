@@ -2,7 +2,7 @@ type User {
   id: ID! @id
   username: String! @unique
   email: String! @unique
-  phoneNumber: String @unique
+  phoneNumber: String
   city: String
   password: String!
   userType: UserType!

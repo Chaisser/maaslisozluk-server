@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import generateCode from "./../../utils/generateCode";
 import getUserId from "./../../utils/getUserId";
 import { sendWelcomeEmail } from "./../../email/email";
+import { sendActivationEmail } from "./../../email/email";
+import axios from "axios";
 
 const userMutation = {
   async loginUser(parent, args, { prisma }, info) {
@@ -127,6 +129,82 @@ const userMutation = {
       },
       info
     );
+  },
+  async sendPhoneActivationCode(parent, args, { request, prisma }, info) {
+    console.log("sms triggered");
+    const user = getUserId(request);
+    const userData = await prisma.query.user({
+      where: {
+        id: user.userId,
+      },
+    });
+
+    if (!userData.phoneNumber) {
+      throw new Error("Telefon numarası bulunamadı");
+    }
+
+    const username = process.env.NETGSM_USERNAME;
+    const password = process.env.NETGSM_PASSWORD;
+    const phoneNumber = userData.phoneNumber;
+    const message = encodeURI(
+      `${userData.phoneNumberActivationCode} kodu ile maasli sozluk hesabınızı doğrulayabilirsiniz.`
+    );
+    const url = `https://api.netgsm.com.tr/sms/send/get/?usercode=${username}&password=${password}&gsmno=${phoneNumber}&message=${message}&msgheader=INTERAKTFIS`;
+    const sendMessage = await axios.get(url);
+
+    if (sendMessage.data.split(" ")[0] === "00") {
+      return {
+        result: "success",
+      };
+    }
+    throw new Error("SMS gönderilemedi");
+  },
+  async sendEmailActivationCode(parent, args, { request, prisma }, info) {
+    const user = getUserId(request);
+    const userId = user.userId;
+    const result = await prisma.query.user({ where: { id: userId } });
+    try {
+      sendActivationEmail(result.email, result.emailActivationCode, result.id);
+      return {
+        result: "OK",
+      };
+    } catch (err) {
+      return {
+        result: err.message,
+      };
+    }
+  },
+  async checkEmailActivationCode(parent, args, { request, prisma }, info) {
+    const { emailActivationCode, email, id } = args;
+    const result = await prisma.query.user({ where: { id } });
+    if (!result) {
+      throw new Error("Hatalı Kod");
+    }
+
+    if (
+      emailActivationCode !== result.emailActivationCode ||
+      email !== result.email ||
+      result.emailActivation === true
+    ) {
+      throw new Error("Hatalı Kod");
+    }
+
+    const createemailActivationCode = generateCode(100000, 999999);
+
+    const updateUser = await prisma.mutation.updateUser({
+      where: {
+        id,
+      },
+      data: {
+        emailActivation: true,
+        emailActivationCode: createemailActivationCode,
+      },
+    });
+    if (updateUser) {
+      return {
+        result: "OK",
+      };
+    }
   },
 };
 

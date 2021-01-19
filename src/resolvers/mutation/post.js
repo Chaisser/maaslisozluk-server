@@ -4,7 +4,6 @@ import settings from "./../../utils/settings";
 
 const postMutation = {
   createPost(parent, args, { request, prisma }, info) {
-    console.log(args, "ARGS");
     const slug = args.topic;
     const { description } = args.data;
     const user = getUser(request);

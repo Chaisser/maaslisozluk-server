@@ -82,6 +82,7 @@ const userQuery = {
       },
       info
     );
+    console.log(result);
     return result;
   },
   async getBudget(parent, args, { prisma, request }, info) {

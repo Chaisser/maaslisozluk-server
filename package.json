@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node src/index.js",
-    "dev": "nodemon src/index.js --ext js,graphql --exec babel-node",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
     "test": "echo \"Error: no test specified\" && exit 1",
     "get-schema": "cd prisma && prisma generate",
     "deletedb": "cd prisma && prisma delete",
@@ -18,6 +18,8 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "env-cmd": "^10.1.0",
     "express": "^4.17.1",
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",

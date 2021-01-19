@@ -26,7 +26,9 @@ type Mutation {
   deleteUser(id: ID!): User!
   loginUser(data: LoginUserInput!): AuthPayload!
   changePassword(data: ChangePasswordInput): User!
-
+  sendEmailActivationCode: ResultPayload!
+  sendPhoneActivationCode: ResultPayload!
+  checkEmailActivationCode(emailActivationCode: String!, email: String!, id: ID!): ResultPayload!
   createCategory(data: CreateCategoryInput!): Category!
   updateCategory(data: UpdateCategoryInput, id: ID!): Category!
   deleteCategory(id: ID!): Category!

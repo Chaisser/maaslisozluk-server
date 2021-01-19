@@ -2987,5 +2987,4 @@ input UserWhereUniqueInput {
   id: ID
   username: String
   email: String
-  phoneNumber: String
 }
