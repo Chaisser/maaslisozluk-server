@@ -1,3 +1,4 @@
+require('dotenv').config();
 require("babel-register");
 require("babel-core/register");
 require("babel-polyfill"); // If you use async and await
