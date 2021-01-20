@@ -1,9 +1,10 @@
 import getUserId from "./../../utils/getUserId";
 import getUser from "./../../utils/getUserId";
 import settings from "./../../utils/settings";
+import moment from "moment";
 
 const postMutation = {
-  createPost(parent, args, { request, prisma }, info) {
+  async createPost(parent, args, { request, prisma }, info) {
     const slug = args.topic;
     const { description } = args.data;
     const user = getUser(request);
@@ -12,6 +13,15 @@ const postMutation = {
     if (!description.trim() || description.trim().length < 10) {
       throw new Error("Yazı boş bırakılamaz");
     }
+
+    await prisma.mutation.updateTopic({
+      where: {
+        slug,
+      },
+      data: {
+        slug,
+      },
+    });
 
     return prisma.mutation.createPost(
       {

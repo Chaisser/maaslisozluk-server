@@ -6,8 +6,11 @@ const topicMutation = {
     const { title, description } = args.data;
     const user = getUser(request);
     const userId = user.userId;
+    if (title.trim().length > 60) {
+      throw new Error("başlık 60 karakteri geçemez");
+    }
     const data = {
-      title,
+      title: title.trim(),
       slug: getSlug(title),
       paidTimes: 0,
       status: true,

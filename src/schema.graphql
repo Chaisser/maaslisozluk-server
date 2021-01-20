@@ -22,13 +22,14 @@ type Query {
 
 type Mutation {
   createUser(data: CreateUserInput!): AuthPayload!
-  updateUser(data: UpdateUserInput, id: ID!): User!
+  updateUser(data: UpdateUserInput): User!
   deleteUser(id: ID!): User!
   loginUser(data: LoginUserInput!): AuthPayload!
   changePassword(data: ChangePasswordInput): User!
   sendEmailActivationCode: ResultPayload!
   sendPhoneActivationCode: ResultPayload!
   checkEmailActivationCode(emailActivationCode: String!, email: String!, id: ID!): ResultPayload!
+  checkPhoneActivationCode(phoneActivationCode: String!): ResultPayload!
   createCategory(data: CreateCategoryInput!): Category!
   updateCategory(data: UpdateCategoryInput, id: ID!): Category!
   deleteCategory(id: ID!): Category!
@@ -108,13 +109,11 @@ input UpdateUserInput {
   email: String
   city: String
   phoneNumber: String
-  password: String
 }
 
 input ChangePasswordInput {
   currentPassword: String!
   password: String!
-  rePassword: String!
 }
 
 type Transaction {
