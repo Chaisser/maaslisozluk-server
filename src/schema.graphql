@@ -74,6 +74,7 @@ input LoginUserInput {
 }
 
 type User {
+  id: ID!
   username: String!
   email: String!
   city: String
