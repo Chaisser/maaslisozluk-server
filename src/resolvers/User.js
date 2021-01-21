@@ -4,8 +4,10 @@ const User = {
   username: {
     async resolve(parent, args, { request, prisma }, info) {
       const user = getUserId(request, false);
-      if (user.userId && parent.id === user.userId) {
-        return parent.username;
+      if (user) {
+        if (user.userId && parent.id === user.userId) {
+          return parent.username;
+        }
       }
       return "not-permitted";
     },
@@ -13,8 +15,10 @@ const User = {
   email: {
     async resolve(parent, args, { request, prisma }, info) {
       const user = getUserId(request, false);
-      if (user.userId && parent.id === user.userId) {
-        return parent.email;
+      if (user) {
+        if (user.userId && parent.id === user.userId) {
+          return parent.email;
+        }
       }
       return "not-permitted";
     },
@@ -22,8 +26,10 @@ const User = {
   phoneNumber: {
     async resolve(parent, args, { request, prisma }, info) {
       const user = getUserId(request, false);
-      if (user.userId && parent.id === user.userId) {
-        return parent.phoneNumber;
+      if (user) {
+        if (user.userId && parent.id === user.userId) {
+          return parent.phoneNumber;
+        }
       }
       return "not-permitted";
     },
