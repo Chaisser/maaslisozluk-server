@@ -1,18 +1,8 @@
 import getUserId from "./../utils/getUserId";
 
 const User = {
-  username: {
-    async resolve(parent, args, { request, prisma }, info) {
-      const user = getUserId(request, false);
-      if (user) {
-        if (user.userId && parent.id === user.userId) {
-          return parent.username;
-        }
-      }
-      return "not-permitted";
-    },
-  },
   email: {
+    fragment: "fragment userId on User { id }",
     async resolve(parent, args, { request, prisma }, info) {
       const user = getUserId(request, false);
       if (user) {
@@ -24,6 +14,7 @@ const User = {
     },
   },
   phoneNumber: {
+    fragment: "fragment userId on User { id }",
     async resolve(parent, args, { request, prisma }, info) {
       const user = getUserId(request, false);
       if (user) {
