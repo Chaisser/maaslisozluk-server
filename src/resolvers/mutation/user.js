@@ -3,8 +3,8 @@ import hashPassword from "./../../utils/hashPassword";
 import bcrypt from "bcryptjs";
 import generateCode from "./../../utils/generateCode";
 import getUserId from "./../../utils/getUserId";
-import { sendWelcomeEmail } from "./../../email/email";
-import { sendActivationEmail } from "./../../email/email";
+import { sendWelcomeEmail, sendActivationEmail, sendResetPasswordEmail } from "./../../email/email";
+import {} from "./../../email/email";
 import axios from "axios";
 
 const userMutation = {
@@ -153,7 +153,7 @@ const userMutation = {
       phoneNumberActivation
     }`
     );
-    console.log(args.data.phoneNumber);
+
     if (args.data.phoneNumber) {
       args.data.phoneNumber = args.data.phoneNumber.replace(/[^\d]/g, "");
     }
@@ -203,6 +203,26 @@ const userMutation = {
     );
   },
   async deleteUser(parent, args, { prisma, request }, info) {
+    const user = getUserId(request);
+    const userId = user.userId;
+
+    const checkUser = await prisma.query.users({
+      where: {
+        AND: [
+          {
+            id: userId,
+          },
+          {
+            userType: "ADMIN",
+          },
+        ],
+      },
+    });
+
+    if (checkUser.length !== 1) {
+      throw new Error("auth error!");
+    }
+
     return prisma.mutation.deleteUser(
       {
         where: {
@@ -211,6 +231,77 @@ const userMutation = {
       },
       info
     );
+  },
+  async sendForgetPasswordCode(parent, args, { request, prisma }, info) {
+    const user = await prisma.query.user({
+      where: {
+        email: args.email,
+      },
+    });
+    if (!user) {
+      return {
+        result: "success",
+      };
+    }
+
+    const emailActivationCode = generateCode(100000, 999999);
+
+    const updateUser = await prisma.mutation.updateUser({
+      where: {
+        email: args.email,
+      },
+      data: {
+        emailActivationCode,
+      },
+    });
+
+    const sendResetPassword = sendResetPasswordEmail(args.email, emailActivationCode, user.id);
+
+    return {
+      result: "success",
+    };
+  },
+  async checkPasswordActivationCode(parent, args, { request, prisma }, info) {
+    const { emailActivationCode, email, id } = args;
+    const result = await prisma.query.user({ where: { id } });
+    if (!result) {
+      throw new Error("Hatalı Kod");
+    }
+
+    if (emailActivationCode !== result.emailActivationCode || email !== result.email) {
+      throw new Error("Hatalı Kod");
+    }
+    return {
+      result: "success",
+    };
+  },
+  async resetPassword(parent, args, { request, prisma }, info) {
+    const { emailActivationCode, email, id, password } = args;
+
+    const result = await prisma.query.user({ where: { id } });
+    if (!result) {
+      throw new Error("Hatalı Kod");
+    }
+
+    if (emailActivationCode !== result.emailActivationCode || email !== result.email) {
+      throw new Error("Hatalı Kod");
+    }
+
+    const createemailActivationCode = generateCode(100000, 999999);
+    const userPassword = await hashPassword(password);
+    const updateUser = await prisma.mutation.updateUser({
+      where: {
+        id,
+      },
+      data: {
+        password: userPassword,
+        emailActivation: true,
+        emailActivationCode: createemailActivationCode,
+      },
+    });
+    return {
+      result: "success",
+    };
   },
   async sendPhoneActivationCode(parent, args, { request, prisma }, info) {
     const user = getUserId(request);

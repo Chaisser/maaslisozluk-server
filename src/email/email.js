@@ -20,4 +20,14 @@ const sendActivationEmail = (email, emailActivationCode, id) => {
   });
 };
 
-export { sendWelcomeEmail, sendActivationEmail };
+const sendResetPasswordEmail = (email, emailActivationCode, id) => {
+  sgMail.send({
+    to: email,
+    from: "info@maaslisozluk.com",
+    subject: "maaşlı sözlük şifre sıfırlama",
+    text: "Bu e-posta size maaslisozluk tarafından şifrenizi unuttuğunuz için gönderilmiştir",
+    html: `<p>merhaba,</p><p>şifrenizi değiştirmek için <a href="https://www.maaslisozluk.com/sifre-degistir?kod=${emailActivationCode}&email=${email}&id=${id}">buraya tıklayabilirsiniz</a></p>`,
+  });
+};
+
+export { sendWelcomeEmail, sendActivationEmail, sendResetPasswordEmail };

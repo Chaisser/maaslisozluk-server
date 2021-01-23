@@ -2,6 +2,8 @@ import getUserId from "./../../utils/getUserId";
 import getUser from "./../../utils/getUserId";
 import settings from "./../../utils/settings";
 import moment from "moment";
+import { Webhook, MessageBuilder } from "discord-webhook-node";
+const hook = new Webhook(process.env.DISCORD_WEBHOOK);
 
 const postMutation = {
   async createPost(parent, args, { request, prisma }, info) {
@@ -14,7 +16,7 @@ const postMutation = {
       throw new Error("Yazı boş bırakılamaz");
     }
 
-    await prisma.mutation.updateTopic({
+    const topic = await prisma.mutation.updateTopic({
       where: {
         slug,
       },
@@ -22,6 +24,16 @@ const postMutation = {
         slug,
       },
     });
+
+    const embed = new MessageBuilder()
+      .setTitle(topic.title)
+      .setURL(`https://www.maaslisozluk.com/konu/${topic.slug}`)
+      .setColor("#00b0f4")
+      .setDescription(description)
+      .setFooter("maaşlı haberci bildirdi", "https://storage.googleapis.com/cdn.maaslisozluk.com/maasli-sozluk.jpg")
+      .setTimestamp();
+
+    await hook.send(embed);
 
     return prisma.mutation.createPost(
       {
