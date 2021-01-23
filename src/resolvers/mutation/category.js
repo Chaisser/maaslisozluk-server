@@ -3,7 +3,7 @@ import getSlug from "speakingurl";
 const categoryMutation = {
   createCategory(parent, args, { prisma, request }, info) {
     const { title, description } = args.data;
-    const slug = getSlug(title);
+    const slug = getSlug(title, { lang: "tr" });
     return prisma.mutation.createCategory(
       {
         data: {
@@ -23,7 +23,7 @@ const categoryMutation = {
 
     if (typeof title === "string") {
       data.title = title;
-      data.slug = getSlug(title);
+      data.slug = getSlug(title, { lang: "tr" });
     }
 
     if (typeof description === "string") {

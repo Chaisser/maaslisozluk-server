@@ -29,6 +29,7 @@ type Transaction {
   id: ID! @id
   amount: Int!
   budgetType: BudgetType!
+  description: String
   user: User! @relation(name: "TransactionToUser", onDelete: SET_NULL)
   topic: Topic @relation(name: "TransactionToTopic", onDelete: SET_NULL)
   post: Post @relation(name: "TransactionToPost", onDelete: SET_NULL)
@@ -112,6 +113,7 @@ enum BudgetType {
   POST
   WELCOME
   REPORT
+  CUSTOM
   DELETEDPOST
   DISLIKE
   PAYMENT

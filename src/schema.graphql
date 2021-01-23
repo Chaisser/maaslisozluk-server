@@ -48,6 +48,14 @@ type Mutation {
   likePost(id: ID!, likeType: LikeType): Post!
 }
 
+type Subscription {
+  transactionSubscription: TransactionSubscriptionPayload!
+}
+
+type TransactionSubscriptionPayload {
+  mutation: MutationType
+  node: Transaction!
+}
 type TopicsPayload {
   topics: [Topic!]!
   totalTopic: Int!
@@ -122,6 +130,7 @@ input ChangePasswordInput {
 type Transaction {
   id: ID!
   amount: Int!
+  description: String
   budgetType: BudgetType!
   user: User!
   topic: Topic
@@ -239,6 +248,7 @@ enum BudgetType {
   POST
   WELCOME
   REPORT
+  CUSTOM
   DELETEDPOST
   DISLIKE
   PAYMENT
@@ -252,6 +262,12 @@ enum Theme {
 enum PostStatusType {
   DRAFT
   ACTIVE
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
 }
 
 enum UserType {

@@ -41,6 +41,7 @@ enum BudgetType {
   POST
   WELCOME
   REPORT
+  CUSTOM
   DELETEDPOST
   DISLIKE
   PAYMENT
@@ -1936,6 +1937,7 @@ type Transaction {
   id: ID!
   amount: Int!
   budgetType: BudgetType!
+  description: String
   user: User!
   topic: Topic
   post: Post
@@ -1953,6 +1955,7 @@ input TransactionCreateInput {
   id: ID
   amount: Int!
   budgetType: BudgetType!
+  description: String
   user: UserCreateOneWithoutTransactionsInput!
   topic: TopicCreateOneWithoutTransactionsInput
   post: PostCreateOneWithoutTransactionsInput
@@ -1977,6 +1980,7 @@ input TransactionCreateWithoutPostInput {
   id: ID
   amount: Int!
   budgetType: BudgetType!
+  description: String
   user: UserCreateOneWithoutTransactionsInput!
   topic: TopicCreateOneWithoutTransactionsInput
 }
@@ -1985,6 +1989,7 @@ input TransactionCreateWithoutTopicInput {
   id: ID
   amount: Int!
   budgetType: BudgetType!
+  description: String
   user: UserCreateOneWithoutTransactionsInput!
   post: PostCreateOneWithoutTransactionsInput
 }
@@ -1993,6 +1998,7 @@ input TransactionCreateWithoutUserInput {
   id: ID
   amount: Int!
   budgetType: BudgetType!
+  description: String
   topic: TopicCreateOneWithoutTransactionsInput
   post: PostCreateOneWithoutTransactionsInput
 }
@@ -2009,6 +2015,8 @@ enum TransactionOrderByInput {
   amount_DESC
   budgetType_ASC
   budgetType_DESC
+  description_ASC
+  description_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2019,6 +2027,7 @@ type TransactionPreviousValues {
   id: ID!
   amount: Int!
   budgetType: BudgetType!
+  description: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2050,6 +2059,20 @@ input TransactionScalarWhereInput {
   budgetType_not: BudgetType
   budgetType_in: [BudgetType!]
   budgetType_not_in: [BudgetType!]
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -2092,6 +2115,7 @@ input TransactionSubscriptionWhereInput {
 input TransactionUpdateInput {
   amount: Int
   budgetType: BudgetType
+  description: String
   user: UserUpdateOneRequiredWithoutTransactionsInput
   topic: TopicUpdateOneWithoutTransactionsInput
   post: PostUpdateOneWithoutTransactionsInput
@@ -2100,11 +2124,13 @@ input TransactionUpdateInput {
 input TransactionUpdateManyDataInput {
   amount: Int
   budgetType: BudgetType
+  description: String
 }
 
 input TransactionUpdateManyMutationInput {
   amount: Int
   budgetType: BudgetType
+  description: String
 }
 
 input TransactionUpdateManyWithoutPostInput {
@@ -2151,6 +2177,7 @@ input TransactionUpdateManyWithWhereNestedInput {
 input TransactionUpdateWithoutPostDataInput {
   amount: Int
   budgetType: BudgetType
+  description: String
   user: UserUpdateOneRequiredWithoutTransactionsInput
   topic: TopicUpdateOneWithoutTransactionsInput
 }
@@ -2158,6 +2185,7 @@ input TransactionUpdateWithoutPostDataInput {
 input TransactionUpdateWithoutTopicDataInput {
   amount: Int
   budgetType: BudgetType
+  description: String
   user: UserUpdateOneRequiredWithoutTransactionsInput
   post: PostUpdateOneWithoutTransactionsInput
 }
@@ -2165,6 +2193,7 @@ input TransactionUpdateWithoutTopicDataInput {
 input TransactionUpdateWithoutUserDataInput {
   amount: Int
   budgetType: BudgetType
+  description: String
   topic: TopicUpdateOneWithoutTransactionsInput
   post: PostUpdateOneWithoutTransactionsInput
 }
@@ -2229,6 +2258,20 @@ input TransactionWhereInput {
   budgetType_not: BudgetType
   budgetType_in: [BudgetType!]
   budgetType_not_in: [BudgetType!]
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   user: UserWhereInput
   topic: TopicWhereInput
   post: PostWhereInput

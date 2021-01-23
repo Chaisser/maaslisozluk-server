@@ -1,17 +1,9 @@
-// subscription {
-//     post(where: { node: { topic: { slug: "sssssssssssssssss" } } }) {
-//       mutation
-//       node {
-//         id
-//         description
-//         user {
-//           id
-//           username
-//         }
-//         topic {
-//           id
-//           title
-//         }
-//       }
-//     }
-//   }
+const Subscription = {
+  transactionSubscription: {
+    subscribe(parent, args, { prisma, request }, info) {
+      return prisma.subscription.transaction({}, info);
+    },
+  },
+};
+
+export default Subscription;

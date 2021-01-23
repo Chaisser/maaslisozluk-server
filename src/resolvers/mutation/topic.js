@@ -11,7 +11,7 @@ const topicMutation = {
     }
     const data = {
       title: title.trim(),
-      slug: getSlug(title),
+      slug: getSlug(title, { lang: "tr" }),
       paidTimes: 0,
       status: true,
       category: {

@@ -14,6 +14,7 @@ const resolvers = {
   Topic,
   Category,
   Post,
+  Subscription,
 };
 
 const fragmentReplacements = extractFragmentReplacements(resolvers);
