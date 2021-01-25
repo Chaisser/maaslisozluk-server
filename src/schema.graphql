@@ -50,12 +50,19 @@ type Mutation {
 
 type Subscription {
   transactionSubscription: TransactionSubscriptionPayload!
+  livePostSubscription(slug: String!): LivePostSubscriptionPayload!
 }
 
 type TransactionSubscriptionPayload {
   mutation: MutationType
   node: Transaction!
 }
+
+type LivePostSubscriptionPayload {
+  mutation: MutationType
+  node: Post!
+}
+
 type TopicsPayload {
   topics: [Topic!]!
   totalTopic: Int!

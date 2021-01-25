@@ -16,7 +16,7 @@ const sendActivationEmail = (email, emailActivationCode, id) => {
     from: "info@maaslisozluk.com",
     subject: "maaşlı sözlük e-posta onaylama",
     text: "Bu e-posta size maaslisozluk tarafından e-posta onay kodunu değiştirmek istediğiniz için gönderilmiştir",
-    html: `<p>merhaba,</p><p><strong>aktivasyon kodunuz ${emailActivationCode} </strong></p><p>aktivasyon için <a href="https://www.maaslisozluk.com/aktivasyon?kod=${emailActivationCode}&email=${email}&id=${id}">buraya tıklayabilirsiniz</a></p>`,
+    html: `<p>merhaba,</p><p>aktivasyon için <a href="https://www.maaslisozluk.com/aktivasyon?kod=${emailActivationCode}&email=${email}&id=${id}">buraya tıklayabilirsiniz</a></p>`,
   });
 };
 
