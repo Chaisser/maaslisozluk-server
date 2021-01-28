@@ -14,6 +14,20 @@ const topicQuery = {
     );
     return result[0];
   },
+
+  currencies(parent, args, { prisma }, info) {
+    return prisma.query.currencies(
+      {
+        last: 5,
+      },
+      `{
+        id 
+        usDollar
+        turkishLira
+        createdAt
+      }`
+    );
+  },
 };
 
 export default topicQuery;

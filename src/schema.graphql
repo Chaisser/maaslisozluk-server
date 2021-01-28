@@ -6,6 +6,7 @@ type Query {
   getTransactions: [Transaction!]!
   author(username: String!): User
   currency: Currency
+  currencies: [Currency!]!
   checkToken(token: String!): User!
   checkUsername(username: String!): User
   categories(first: Int): [Category!]!
