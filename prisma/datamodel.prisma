@@ -14,6 +14,7 @@ type User {
   emailActivation: Boolean!
   twoFactorCode: String!
   twoFactorActivation: Boolean!
+  fingerPrint: String
   theme: Theme!
   budget: Int!
   topics: [Topic!]! @relation(name: "UserToTopic", onDelete: SET_NULL)
@@ -101,6 +102,24 @@ type Currency {
   updatedAt: DateTime! @updatedAt
 }
 
+type Statistic {
+  id: ID! @id
+  topic: Topic!
+  user: User
+  ip: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Faucet {
+  id: ID! @id
+  title: String!
+  url: String!
+  paymentStatus: PaymentStatusType!
+  clickCounter: Int!
+  order: Int!
+}
+
 enum LikeType {
   LIKE
   DISLIKE
@@ -133,8 +152,15 @@ enum UserType {
   ADMIN
   MODERATOR
   SUBSCRIBER
+  INSPECTION
   PAYABLEUSER
   USER
   PASSIVE
   BANNED
+}
+
+enum PaymentStatusType {
+  PAYING
+  NOTSURE
+  SCAM
 }

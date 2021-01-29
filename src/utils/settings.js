@@ -1,8 +1,8 @@
 export default {
   favouritePaidTimes: 3,
-  favouritePaidAmount: 20,
-  likesPaidTimes: 5,
-  likesPaidAmount: 10,
-  dislikesPaidTimes: 15,
+  favouritePaidAmount: 1,
+  likesPaidTimes: 1,
+  likesPaidAmount: 1,
+  dislikesPaidTimes: 25,
   dislikesPaidAmount: -10,
 };

@@ -6,6 +6,10 @@ type AggregateCurrency {
   count: Int!
 }
 
+type AggregateFaucet {
+  count: Int!
+}
+
 type AggregateFavorite {
   count: Int!
 }
@@ -15,6 +19,10 @@ type AggregateLike {
 }
 
 type AggregatePost {
+  count: Int!
+}
+
+type AggregateStatistic {
   count: Int!
 }
 
@@ -371,6 +379,165 @@ input CurrencyWhereUniqueInput {
 }
 
 scalar DateTime
+
+type Faucet {
+  id: ID!
+  title: String!
+  url: String!
+  paymentStatus: PaymentStatusType!
+  clickCounter: Int!
+  order: Int!
+}
+
+type FaucetConnection {
+  pageInfo: PageInfo!
+  edges: [FaucetEdge]!
+  aggregate: AggregateFaucet!
+}
+
+input FaucetCreateInput {
+  id: ID
+  title: String!
+  url: String!
+  paymentStatus: PaymentStatusType!
+  clickCounter: Int!
+  order: Int!
+}
+
+type FaucetEdge {
+  node: Faucet!
+  cursor: String!
+}
+
+enum FaucetOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  url_ASC
+  url_DESC
+  paymentStatus_ASC
+  paymentStatus_DESC
+  clickCounter_ASC
+  clickCounter_DESC
+  order_ASC
+  order_DESC
+}
+
+type FaucetPreviousValues {
+  id: ID!
+  title: String!
+  url: String!
+  paymentStatus: PaymentStatusType!
+  clickCounter: Int!
+  order: Int!
+}
+
+type FaucetSubscriptionPayload {
+  mutation: MutationType!
+  node: Faucet
+  updatedFields: [String!]
+  previousValues: FaucetPreviousValues
+}
+
+input FaucetSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: FaucetWhereInput
+  AND: [FaucetSubscriptionWhereInput!]
+  OR: [FaucetSubscriptionWhereInput!]
+  NOT: [FaucetSubscriptionWhereInput!]
+}
+
+input FaucetUpdateInput {
+  title: String
+  url: String
+  paymentStatus: PaymentStatusType
+  clickCounter: Int
+  order: Int
+}
+
+input FaucetUpdateManyMutationInput {
+  title: String
+  url: String
+  paymentStatus: PaymentStatusType
+  clickCounter: Int
+  order: Int
+}
+
+input FaucetWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  url: String
+  url_not: String
+  url_in: [String!]
+  url_not_in: [String!]
+  url_lt: String
+  url_lte: String
+  url_gt: String
+  url_gte: String
+  url_contains: String
+  url_not_contains: String
+  url_starts_with: String
+  url_not_starts_with: String
+  url_ends_with: String
+  url_not_ends_with: String
+  paymentStatus: PaymentStatusType
+  paymentStatus_not: PaymentStatusType
+  paymentStatus_in: [PaymentStatusType!]
+  paymentStatus_not_in: [PaymentStatusType!]
+  clickCounter: Int
+  clickCounter_not: Int
+  clickCounter_in: [Int!]
+  clickCounter_not_in: [Int!]
+  clickCounter_lt: Int
+  clickCounter_lte: Int
+  clickCounter_gt: Int
+  clickCounter_gte: Int
+  order: Int
+  order_not: Int
+  order_in: [Int!]
+  order_not_in: [Int!]
+  order_lt: Int
+  order_lte: Int
+  order_gt: Int
+  order_gte: Int
+  AND: [FaucetWhereInput!]
+  OR: [FaucetWhereInput!]
+  NOT: [FaucetWhereInput!]
+}
+
+input FaucetWhereUniqueInput {
+  id: ID
+}
 
 type Favorite {
   id: ID!
@@ -851,6 +1018,12 @@ type Mutation {
   upsertCurrency(where: CurrencyWhereUniqueInput!, create: CurrencyCreateInput!, update: CurrencyUpdateInput!): Currency!
   deleteCurrency(where: CurrencyWhereUniqueInput!): Currency
   deleteManyCurrencies(where: CurrencyWhereInput): BatchPayload!
+  createFaucet(data: FaucetCreateInput!): Faucet!
+  updateFaucet(data: FaucetUpdateInput!, where: FaucetWhereUniqueInput!): Faucet
+  updateManyFaucets(data: FaucetUpdateManyMutationInput!, where: FaucetWhereInput): BatchPayload!
+  upsertFaucet(where: FaucetWhereUniqueInput!, create: FaucetCreateInput!, update: FaucetUpdateInput!): Faucet!
+  deleteFaucet(where: FaucetWhereUniqueInput!): Faucet
+  deleteManyFaucets(where: FaucetWhereInput): BatchPayload!
   createFavorite(data: FavoriteCreateInput!): Favorite!
   updateFavorite(data: FavoriteUpdateInput!, where: FavoriteWhereUniqueInput!): Favorite
   upsertFavorite(where: FavoriteWhereUniqueInput!, create: FavoriteCreateInput!, update: FavoriteUpdateInput!): Favorite!
@@ -868,6 +1041,12 @@ type Mutation {
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   deletePost(where: PostWhereUniqueInput!): Post
   deleteManyPosts(where: PostWhereInput): BatchPayload!
+  createStatistic(data: StatisticCreateInput!): Statistic!
+  updateStatistic(data: StatisticUpdateInput!, where: StatisticWhereUniqueInput!): Statistic
+  updateManyStatistics(data: StatisticUpdateManyMutationInput!, where: StatisticWhereInput): BatchPayload!
+  upsertStatistic(where: StatisticWhereUniqueInput!, create: StatisticCreateInput!, update: StatisticUpdateInput!): Statistic!
+  deleteStatistic(where: StatisticWhereUniqueInput!): Statistic
+  deleteManyStatistics(where: StatisticWhereInput): BatchPayload!
   createTopic(data: TopicCreateInput!): Topic!
   updateTopic(data: TopicUpdateInput!, where: TopicWhereUniqueInput!): Topic
   updateManyTopics(data: TopicUpdateManyMutationInput!, where: TopicWhereInput): BatchPayload!
@@ -903,6 +1082,12 @@ type PageInfo {
   hasPreviousPage: Boolean!
   startCursor: String
   endCursor: String
+}
+
+enum PaymentStatusType {
+  PAYING
+  NOTSURE
+  SCAM
 }
 
 type Post {
@@ -1447,6 +1632,9 @@ type Query {
   currency(where: CurrencyWhereUniqueInput!): Currency
   currencies(where: CurrencyWhereInput, orderBy: CurrencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Currency]!
   currenciesConnection(where: CurrencyWhereInput, orderBy: CurrencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CurrencyConnection!
+  faucet(where: FaucetWhereUniqueInput!): Faucet
+  faucets(where: FaucetWhereInput, orderBy: FaucetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Faucet]!
+  faucetsConnection(where: FaucetWhereInput, orderBy: FaucetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FaucetConnection!
   favorite(where: FavoriteWhereUniqueInput!): Favorite
   favorites(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Favorite]!
   favoritesConnection(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FavoriteConnection!
@@ -1456,6 +1644,9 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  statistic(where: StatisticWhereUniqueInput!): Statistic
+  statistics(where: StatisticWhereInput, orderBy: StatisticOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Statistic]!
+  statisticsConnection(where: StatisticWhereInput, orderBy: StatisticOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StatisticConnection!
   topic(where: TopicWhereUniqueInput!): Topic
   topics(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Topic]!
   topicsConnection(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TopicConnection!
@@ -1468,12 +1659,143 @@ type Query {
   node(id: ID!): Node
 }
 
+type Statistic {
+  id: ID!
+  topic: Topic!
+  user: User
+  ip: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type StatisticConnection {
+  pageInfo: PageInfo!
+  edges: [StatisticEdge]!
+  aggregate: AggregateStatistic!
+}
+
+input StatisticCreateInput {
+  id: ID
+  topic: TopicCreateOneInput!
+  user: UserCreateOneInput
+  ip: String!
+}
+
+type StatisticEdge {
+  node: Statistic!
+  cursor: String!
+}
+
+enum StatisticOrderByInput {
+  id_ASC
+  id_DESC
+  ip_ASC
+  ip_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type StatisticPreviousValues {
+  id: ID!
+  ip: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type StatisticSubscriptionPayload {
+  mutation: MutationType!
+  node: Statistic
+  updatedFields: [String!]
+  previousValues: StatisticPreviousValues
+}
+
+input StatisticSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: StatisticWhereInput
+  AND: [StatisticSubscriptionWhereInput!]
+  OR: [StatisticSubscriptionWhereInput!]
+  NOT: [StatisticSubscriptionWhereInput!]
+}
+
+input StatisticUpdateInput {
+  topic: TopicUpdateOneRequiredInput
+  user: UserUpdateOneInput
+  ip: String
+}
+
+input StatisticUpdateManyMutationInput {
+  ip: String
+}
+
+input StatisticWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  topic: TopicWhereInput
+  user: UserWhereInput
+  ip: String
+  ip_not: String
+  ip_in: [String!]
+  ip_not_in: [String!]
+  ip_lt: String
+  ip_lte: String
+  ip_gt: String
+  ip_gte: String
+  ip_contains: String
+  ip_not_contains: String
+  ip_starts_with: String
+  ip_not_starts_with: String
+  ip_ends_with: String
+  ip_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [StatisticWhereInput!]
+  OR: [StatisticWhereInput!]
+  NOT: [StatisticWhereInput!]
+}
+
+input StatisticWhereUniqueInput {
+  id: ID
+}
+
 type Subscription {
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
   currency(where: CurrencySubscriptionWhereInput): CurrencySubscriptionPayload
+  faucet(where: FaucetSubscriptionWhereInput): FaucetSubscriptionPayload
   favorite(where: FavoriteSubscriptionWhereInput): FavoriteSubscriptionPayload
   like(where: LikeSubscriptionWhereInput): LikeSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  statistic(where: StatisticSubscriptionWhereInput): StatisticSubscriptionPayload
   topic(where: TopicSubscriptionWhereInput): TopicSubscriptionPayload
   transaction(where: TransactionSubscriptionWhereInput): TransactionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
@@ -1524,6 +1846,11 @@ input TopicCreateManyWithoutCategoryInput {
 input TopicCreateManyWithoutUserInput {
   create: [TopicCreateWithoutUserInput!]
   connect: [TopicWhereUniqueInput!]
+}
+
+input TopicCreateOneInput {
+  create: TopicCreateInput
+  connect: TopicWhereUniqueInput
 }
 
 input TopicCreateOneWithoutPostsInput {
@@ -1704,6 +2031,17 @@ input TopicSubscriptionWhereInput {
   NOT: [TopicSubscriptionWhereInput!]
 }
 
+input TopicUpdateDataInput {
+  title: String
+  slug: String
+  category: CategoryUpdateOneRequiredWithoutTopicsInput
+  user: UserUpdateOneWithoutTopicsInput
+  posts: PostUpdateManyWithoutTopicInput
+  transactions: TransactionUpdateManyWithoutTopicInput
+  paidTimes: Int
+  status: Boolean
+}
+
 input TopicUpdateInput {
   title: String
   slug: String
@@ -1756,6 +2094,13 @@ input TopicUpdateManyWithoutUserInput {
 input TopicUpdateManyWithWhereNestedInput {
   where: TopicScalarWhereInput!
   data: TopicUpdateManyDataInput!
+}
+
+input TopicUpdateOneRequiredInput {
+  create: TopicCreateInput
+  update: TopicUpdateDataInput
+  upsert: TopicUpsertNestedInput
+  connect: TopicWhereUniqueInput
 }
 
 input TopicUpdateOneRequiredWithoutPostsInput {
@@ -1822,6 +2167,11 @@ input TopicUpdateWithWhereUniqueWithoutCategoryInput {
 input TopicUpdateWithWhereUniqueWithoutUserInput {
   where: TopicWhereUniqueInput!
   data: TopicUpdateWithoutUserDataInput!
+}
+
+input TopicUpsertNestedInput {
+  update: TopicUpdateDataInput!
+  create: TopicCreateInput!
 }
 
 input TopicUpsertWithoutPostsInput {
@@ -2316,6 +2666,7 @@ type User {
   emailActivation: Boolean!
   twoFactorCode: String!
   twoFactorActivation: Boolean!
+  fingerPrint: String
   theme: Theme!
   budget: Int!
   topics(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Topic!]
@@ -2349,6 +2700,7 @@ input UserCreateInput {
   emailActivation: Boolean!
   twoFactorCode: String!
   twoFactorActivation: Boolean!
+  fingerPrint: String
   theme: Theme!
   budget: Int!
   topics: TopicCreateManyWithoutUserInput
@@ -2356,6 +2708,11 @@ input UserCreateInput {
   transactions: TransactionCreateManyWithoutUserInput
   likes: LikeCreateManyWithoutUserInput
   favorites: FavoriteCreateManyWithoutUserInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutFavoritesInput {
@@ -2399,6 +2756,7 @@ input UserCreateWithoutFavoritesInput {
   emailActivation: Boolean!
   twoFactorCode: String!
   twoFactorActivation: Boolean!
+  fingerPrint: String
   theme: Theme!
   budget: Int!
   topics: TopicCreateManyWithoutUserInput
@@ -2423,6 +2781,7 @@ input UserCreateWithoutLikesInput {
   emailActivation: Boolean!
   twoFactorCode: String!
   twoFactorActivation: Boolean!
+  fingerPrint: String
   theme: Theme!
   budget: Int!
   topics: TopicCreateManyWithoutUserInput
@@ -2447,6 +2806,7 @@ input UserCreateWithoutPostsInput {
   emailActivation: Boolean!
   twoFactorCode: String!
   twoFactorActivation: Boolean!
+  fingerPrint: String
   theme: Theme!
   budget: Int!
   topics: TopicCreateManyWithoutUserInput
@@ -2471,6 +2831,7 @@ input UserCreateWithoutTopicsInput {
   emailActivation: Boolean!
   twoFactorCode: String!
   twoFactorActivation: Boolean!
+  fingerPrint: String
   theme: Theme!
   budget: Int!
   posts: PostCreateManyWithoutUserInput
@@ -2495,6 +2856,7 @@ input UserCreateWithoutTransactionsInput {
   emailActivation: Boolean!
   twoFactorCode: String!
   twoFactorActivation: Boolean!
+  fingerPrint: String
   theme: Theme!
   budget: Int!
   topics: TopicCreateManyWithoutUserInput
@@ -2539,6 +2901,8 @@ enum UserOrderByInput {
   twoFactorCode_DESC
   twoFactorActivation_ASC
   twoFactorActivation_DESC
+  fingerPrint_ASC
+  fingerPrint_DESC
   theme_ASC
   theme_DESC
   budget_ASC
@@ -2565,6 +2929,7 @@ type UserPreviousValues {
   emailActivation: Boolean!
   twoFactorCode: String!
   twoFactorActivation: Boolean!
+  fingerPrint: String
   theme: Theme!
   budget: Int!
   createdAt: DateTime!
@@ -2593,10 +2958,36 @@ enum UserType {
   ADMIN
   MODERATOR
   SUBSCRIBER
+  INSPECTION
   PAYABLEUSER
   USER
   PASSIVE
   BANNED
+}
+
+input UserUpdateDataInput {
+  username: String
+  email: String
+  phoneNumber: String
+  city: String
+  password: String
+  userType: UserType
+  agreement: String
+  agreementVersion: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivation: Boolean
+  emailActivationCode: String
+  emailActivation: Boolean
+  twoFactorCode: String
+  twoFactorActivation: Boolean
+  fingerPrint: String
+  theme: Theme
+  budget: Int
+  topics: TopicUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
+  transactions: TransactionUpdateManyWithoutUserInput
+  likes: LikeUpdateManyWithoutUserInput
+  favorites: FavoriteUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -2614,6 +3005,7 @@ input UserUpdateInput {
   emailActivation: Boolean
   twoFactorCode: String
   twoFactorActivation: Boolean
+  fingerPrint: String
   theme: Theme
   budget: Int
   topics: TopicUpdateManyWithoutUserInput
@@ -2638,8 +3030,18 @@ input UserUpdateManyMutationInput {
   emailActivation: Boolean
   twoFactorCode: String
   twoFactorActivation: Boolean
+  fingerPrint: String
   theme: Theme
   budget: Int
+}
+
+input UserUpdateOneInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutFavoritesInput {
@@ -2694,6 +3096,7 @@ input UserUpdateWithoutFavoritesDataInput {
   emailActivation: Boolean
   twoFactorCode: String
   twoFactorActivation: Boolean
+  fingerPrint: String
   theme: Theme
   budget: Int
   topics: TopicUpdateManyWithoutUserInput
@@ -2717,6 +3120,7 @@ input UserUpdateWithoutLikesDataInput {
   emailActivation: Boolean
   twoFactorCode: String
   twoFactorActivation: Boolean
+  fingerPrint: String
   theme: Theme
   budget: Int
   topics: TopicUpdateManyWithoutUserInput
@@ -2740,6 +3144,7 @@ input UserUpdateWithoutPostsDataInput {
   emailActivation: Boolean
   twoFactorCode: String
   twoFactorActivation: Boolean
+  fingerPrint: String
   theme: Theme
   budget: Int
   topics: TopicUpdateManyWithoutUserInput
@@ -2763,6 +3168,7 @@ input UserUpdateWithoutTopicsDataInput {
   emailActivation: Boolean
   twoFactorCode: String
   twoFactorActivation: Boolean
+  fingerPrint: String
   theme: Theme
   budget: Int
   posts: PostUpdateManyWithoutUserInput
@@ -2786,12 +3192,18 @@ input UserUpdateWithoutTransactionsDataInput {
   emailActivation: Boolean
   twoFactorCode: String
   twoFactorActivation: Boolean
+  fingerPrint: String
   theme: Theme
   budget: Int
   topics: TopicUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   likes: LikeUpdateManyWithoutUserInput
   favorites: FavoriteUpdateManyWithoutUserInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutFavoritesInput {
@@ -2978,6 +3390,20 @@ input UserWhereInput {
   twoFactorCode_not_ends_with: String
   twoFactorActivation: Boolean
   twoFactorActivation_not: Boolean
+  fingerPrint: String
+  fingerPrint_not: String
+  fingerPrint_in: [String!]
+  fingerPrint_not_in: [String!]
+  fingerPrint_lt: String
+  fingerPrint_lte: String
+  fingerPrint_gt: String
+  fingerPrint_gte: String
+  fingerPrint_contains: String
+  fingerPrint_not_contains: String
+  fingerPrint_starts_with: String
+  fingerPrint_not_starts_with: String
+  fingerPrint_ends_with: String
+  fingerPrint_not_ends_with: String
   theme: Theme
   theme_not: Theme
   theme_in: [Theme!]
