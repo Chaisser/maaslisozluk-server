@@ -4,8 +4,8 @@ import bcrypt from "bcryptjs";
 import generateCode from "./../../utils/generateCode";
 import getUserId from "./../../utils/getUserId";
 import { sendWelcomeEmail, sendActivationEmail, sendResetPasswordEmail } from "./../../email/email";
-import {} from "./../../email/email";
 import axios from "axios";
+import passwordStrength from "check-password-strength";
 
 const userMutation = {
   async loginUser(parent, args, { prisma }, info) {
@@ -39,7 +39,13 @@ const userMutation = {
   },
   async changePassword(parent, args, { prisma, request }, info) {
     const user = getUserId(request);
+
     const userId = user.userId;
+
+    if (passwordStrength(args.data.password).value === "Weak") {
+      throw new Error("şifre çok basit");
+    }
+
     const userInformation = await prisma.query.user(
       {
         where: {
@@ -82,6 +88,10 @@ const userMutation = {
 
     if (args.data.phoneNumber) {
       args.data.phoneNumber = args.data.phoneNumber.replace(/[^\d]/g, "");
+    }
+
+    if (passwordStrength(password).value === "Weak") {
+      throw new Error("şifre çok basit");
     }
 
     const forbiddenUsernames = [
@@ -277,6 +287,10 @@ const userMutation = {
   },
   async resetPassword(parent, args, { request, prisma }, info) {
     const { emailActivationCode, email, id, password } = args;
+
+    if (passwordStrength(password).value === "Weak") {
+      throw new Error("şifre çok basit");
+    }
 
     const result = await prisma.query.user({ where: { id } });
     if (!result) {

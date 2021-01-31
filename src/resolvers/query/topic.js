@@ -48,14 +48,18 @@ const topicQuery = {
     };
   },
   topic(parent, args, { prisma }, info) {
-    return prisma.query.topic(
-      {
-        where: {
-          slug: args.slug,
+    try {
+      return prisma.query.topic(
+        {
+          where: {
+            slug: args.slug,
+          },
         },
-      },
-      info
-    );
+        info
+      );
+    } catch (err) {
+      return null;
+    }
   },
   authorTopics(parent, args, { prisma }, info) {
     return prisma.query.topics(

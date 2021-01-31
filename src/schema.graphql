@@ -37,7 +37,7 @@ type Mutation {
   createCategory(data: CreateCategoryInput!): Category!
   updateCategory(data: UpdateCategoryInput, id: ID!): Category!
   deleteCategory(id: ID!): Category!
-
+  queueDeneme: ResultPayload!
   createTopic(data: CreateTopicInput!, category: ID!): Topic!
   updateTopic(data: UpdateTopicInput, id: ID!): Topic!
   deleteTopic(id: ID!): Topic!
@@ -47,6 +47,8 @@ type Mutation {
   deletePost(id: ID!): Post!
   favoritePost(id: ID!): ResultPayload!
   likePost(id: ID!, likeType: LikeType): Post!
+
+  createStatistic(topic: String!): Statistic!
 }
 
 type Subscription {
@@ -242,6 +244,15 @@ type Currency {
   turkishLira: Float!
   createdAt: String!
   updatedAt: String!
+}
+
+type Statistic {
+  id: ID!
+  topic: Topic!
+  user: User
+  ip: String!
+  createdAt: String
+  updatedAt: String
 }
 
 enum LikeType {

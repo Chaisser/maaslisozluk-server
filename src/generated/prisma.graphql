@@ -1677,7 +1677,18 @@ type StatisticConnection {
 input StatisticCreateInput {
   id: ID
   topic: TopicCreateOneInput!
-  user: UserCreateOneInput
+  user: UserCreateOneWithoutStatisticsInput
+  ip: String!
+}
+
+input StatisticCreateManyWithoutUserInput {
+  create: [StatisticCreateWithoutUserInput!]
+  connect: [StatisticWhereUniqueInput!]
+}
+
+input StatisticCreateWithoutUserInput {
+  id: ID
+  topic: TopicCreateOneInput!
   ip: String!
 }
 
@@ -1704,6 +1715,56 @@ type StatisticPreviousValues {
   updatedAt: DateTime!
 }
 
+input StatisticScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  ip: String
+  ip_not: String
+  ip_in: [String!]
+  ip_not_in: [String!]
+  ip_lt: String
+  ip_lte: String
+  ip_gt: String
+  ip_gte: String
+  ip_contains: String
+  ip_not_contains: String
+  ip_starts_with: String
+  ip_not_starts_with: String
+  ip_ends_with: String
+  ip_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [StatisticScalarWhereInput!]
+  OR: [StatisticScalarWhereInput!]
+  NOT: [StatisticScalarWhereInput!]
+}
+
 type StatisticSubscriptionPayload {
   mutation: MutationType!
   node: Statistic
@@ -1724,12 +1785,49 @@ input StatisticSubscriptionWhereInput {
 
 input StatisticUpdateInput {
   topic: TopicUpdateOneRequiredInput
-  user: UserUpdateOneInput
+  user: UserUpdateOneWithoutStatisticsInput
+  ip: String
+}
+
+input StatisticUpdateManyDataInput {
   ip: String
 }
 
 input StatisticUpdateManyMutationInput {
   ip: String
+}
+
+input StatisticUpdateManyWithoutUserInput {
+  create: [StatisticCreateWithoutUserInput!]
+  delete: [StatisticWhereUniqueInput!]
+  connect: [StatisticWhereUniqueInput!]
+  set: [StatisticWhereUniqueInput!]
+  disconnect: [StatisticWhereUniqueInput!]
+  update: [StatisticUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [StatisticUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [StatisticScalarWhereInput!]
+  updateMany: [StatisticUpdateManyWithWhereNestedInput!]
+}
+
+input StatisticUpdateManyWithWhereNestedInput {
+  where: StatisticScalarWhereInput!
+  data: StatisticUpdateManyDataInput!
+}
+
+input StatisticUpdateWithoutUserDataInput {
+  topic: TopicUpdateOneRequiredInput
+  ip: String
+}
+
+input StatisticUpdateWithWhereUniqueWithoutUserInput {
+  where: StatisticWhereUniqueInput!
+  data: StatisticUpdateWithoutUserDataInput!
+}
+
+input StatisticUpsertWithWhereUniqueWithoutUserInput {
+  where: StatisticWhereUniqueInput!
+  update: StatisticUpdateWithoutUserDataInput!
+  create: StatisticCreateWithoutUserInput!
 }
 
 input StatisticWhereInput {
@@ -2669,6 +2767,7 @@ type User {
   fingerPrint: String
   theme: Theme!
   budget: Int!
+  statistics(where: StatisticWhereInput, orderBy: StatisticOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Statistic!]
   topics(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Topic!]
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   transactions(where: TransactionWhereInput, orderBy: TransactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Transaction!]
@@ -2703,16 +2802,12 @@ input UserCreateInput {
   fingerPrint: String
   theme: Theme!
   budget: Int!
+  statistics: StatisticCreateManyWithoutUserInput
   topics: TopicCreateManyWithoutUserInput
   posts: PostCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
   likes: LikeCreateManyWithoutUserInput
   favorites: FavoriteCreateManyWithoutUserInput
-}
-
-input UserCreateOneInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutFavoritesInput {
@@ -2727,6 +2822,11 @@ input UserCreateOneWithoutLikesInput {
 
 input UserCreateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutStatisticsInput {
+  create: UserCreateWithoutStatisticsInput
   connect: UserWhereUniqueInput
 }
 
@@ -2759,6 +2859,7 @@ input UserCreateWithoutFavoritesInput {
   fingerPrint: String
   theme: Theme!
   budget: Int!
+  statistics: StatisticCreateManyWithoutUserInput
   topics: TopicCreateManyWithoutUserInput
   posts: PostCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
@@ -2784,6 +2885,7 @@ input UserCreateWithoutLikesInput {
   fingerPrint: String
   theme: Theme!
   budget: Int!
+  statistics: StatisticCreateManyWithoutUserInput
   topics: TopicCreateManyWithoutUserInput
   posts: PostCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
@@ -2809,7 +2911,34 @@ input UserCreateWithoutPostsInput {
   fingerPrint: String
   theme: Theme!
   budget: Int!
+  statistics: StatisticCreateManyWithoutUserInput
   topics: TopicCreateManyWithoutUserInput
+  transactions: TransactionCreateManyWithoutUserInput
+  likes: LikeCreateManyWithoutUserInput
+  favorites: FavoriteCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutStatisticsInput {
+  id: ID
+  username: String!
+  email: String!
+  phoneNumber: String
+  city: String
+  password: String!
+  userType: UserType!
+  agreement: String!
+  agreementVersion: Float!
+  phoneNumberActivationCode: String!
+  phoneNumberActivation: Boolean!
+  emailActivationCode: String!
+  emailActivation: Boolean!
+  twoFactorCode: String!
+  twoFactorActivation: Boolean!
+  fingerPrint: String
+  theme: Theme!
+  budget: Int!
+  topics: TopicCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
   likes: LikeCreateManyWithoutUserInput
   favorites: FavoriteCreateManyWithoutUserInput
@@ -2834,6 +2963,7 @@ input UserCreateWithoutTopicsInput {
   fingerPrint: String
   theme: Theme!
   budget: Int!
+  statistics: StatisticCreateManyWithoutUserInput
   posts: PostCreateManyWithoutUserInput
   transactions: TransactionCreateManyWithoutUserInput
   likes: LikeCreateManyWithoutUserInput
@@ -2859,6 +2989,7 @@ input UserCreateWithoutTransactionsInput {
   fingerPrint: String
   theme: Theme!
   budget: Int!
+  statistics: StatisticCreateManyWithoutUserInput
   topics: TopicCreateManyWithoutUserInput
   posts: PostCreateManyWithoutUserInput
   likes: LikeCreateManyWithoutUserInput
@@ -2965,31 +3096,6 @@ enum UserType {
   BANNED
 }
 
-input UserUpdateDataInput {
-  username: String
-  email: String
-  phoneNumber: String
-  city: String
-  password: String
-  userType: UserType
-  agreement: String
-  agreementVersion: Float
-  phoneNumberActivationCode: String
-  phoneNumberActivation: Boolean
-  emailActivationCode: String
-  emailActivation: Boolean
-  twoFactorCode: String
-  twoFactorActivation: Boolean
-  fingerPrint: String
-  theme: Theme
-  budget: Int
-  topics: TopicUpdateManyWithoutUserInput
-  posts: PostUpdateManyWithoutUserInput
-  transactions: TransactionUpdateManyWithoutUserInput
-  likes: LikeUpdateManyWithoutUserInput
-  favorites: FavoriteUpdateManyWithoutUserInput
-}
-
 input UserUpdateInput {
   username: String
   email: String
@@ -3008,6 +3114,7 @@ input UserUpdateInput {
   fingerPrint: String
   theme: Theme
   budget: Int
+  statistics: StatisticUpdateManyWithoutUserInput
   topics: TopicUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
@@ -3033,15 +3140,6 @@ input UserUpdateManyMutationInput {
   fingerPrint: String
   theme: Theme
   budget: Int
-}
-
-input UserUpdateOneInput {
-  create: UserCreateInput
-  update: UserUpdateDataInput
-  upsert: UserUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutFavoritesInput {
@@ -3072,6 +3170,15 @@ input UserUpdateOneRequiredWithoutTransactionsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutStatisticsInput {
+  create: UserCreateWithoutStatisticsInput
+  update: UserUpdateWithoutStatisticsDataInput
+  upsert: UserUpsertWithoutStatisticsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutTopicsInput {
   create: UserCreateWithoutTopicsInput
   update: UserUpdateWithoutTopicsDataInput
@@ -3099,6 +3206,7 @@ input UserUpdateWithoutFavoritesDataInput {
   fingerPrint: String
   theme: Theme
   budget: Int
+  statistics: StatisticUpdateManyWithoutUserInput
   topics: TopicUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
@@ -3123,6 +3231,7 @@ input UserUpdateWithoutLikesDataInput {
   fingerPrint: String
   theme: Theme
   budget: Int
+  statistics: StatisticUpdateManyWithoutUserInput
   topics: TopicUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
@@ -3147,7 +3256,33 @@ input UserUpdateWithoutPostsDataInput {
   fingerPrint: String
   theme: Theme
   budget: Int
+  statistics: StatisticUpdateManyWithoutUserInput
   topics: TopicUpdateManyWithoutUserInput
+  transactions: TransactionUpdateManyWithoutUserInput
+  likes: LikeUpdateManyWithoutUserInput
+  favorites: FavoriteUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutStatisticsDataInput {
+  username: String
+  email: String
+  phoneNumber: String
+  city: String
+  password: String
+  userType: UserType
+  agreement: String
+  agreementVersion: Float
+  phoneNumberActivationCode: String
+  phoneNumberActivation: Boolean
+  emailActivationCode: String
+  emailActivation: Boolean
+  twoFactorCode: String
+  twoFactorActivation: Boolean
+  fingerPrint: String
+  theme: Theme
+  budget: Int
+  topics: TopicUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
   likes: LikeUpdateManyWithoutUserInput
   favorites: FavoriteUpdateManyWithoutUserInput
@@ -3171,6 +3306,7 @@ input UserUpdateWithoutTopicsDataInput {
   fingerPrint: String
   theme: Theme
   budget: Int
+  statistics: StatisticUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   transactions: TransactionUpdateManyWithoutUserInput
   likes: LikeUpdateManyWithoutUserInput
@@ -3195,15 +3331,11 @@ input UserUpdateWithoutTransactionsDataInput {
   fingerPrint: String
   theme: Theme
   budget: Int
+  statistics: StatisticUpdateManyWithoutUserInput
   topics: TopicUpdateManyWithoutUserInput
   posts: PostUpdateManyWithoutUserInput
   likes: LikeUpdateManyWithoutUserInput
   favorites: FavoriteUpdateManyWithoutUserInput
-}
-
-input UserUpsertNestedInput {
-  update: UserUpdateDataInput!
-  create: UserCreateInput!
 }
 
 input UserUpsertWithoutFavoritesInput {
@@ -3219,6 +3351,11 @@ input UserUpsertWithoutLikesInput {
 input UserUpsertWithoutPostsInput {
   update: UserUpdateWithoutPostsDataInput!
   create: UserCreateWithoutPostsInput!
+}
+
+input UserUpsertWithoutStatisticsInput {
+  update: UserUpdateWithoutStatisticsDataInput!
+  create: UserCreateWithoutStatisticsInput!
 }
 
 input UserUpsertWithoutTopicsInput {
@@ -3416,6 +3553,9 @@ input UserWhereInput {
   budget_lte: Int
   budget_gt: Int
   budget_gte: Int
+  statistics_every: StatisticWhereInput
+  statistics_some: StatisticWhereInput
+  statistics_none: StatisticWhereInput
   topics_every: TopicWhereInput
   topics_some: TopicWhereInput
   topics_none: TopicWhereInput

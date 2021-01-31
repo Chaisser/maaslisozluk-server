@@ -18,6 +18,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "bcryptjs": "^2.4.3",
+    "check-password-strength": "^1.0.15",
     "discord-webhook-node": "^1.1.8",
     "dotenv": "^8.2.0",
     "env-cmd": "^10.1.0",

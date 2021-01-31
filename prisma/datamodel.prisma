@@ -17,6 +17,7 @@ type User {
   fingerPrint: String
   theme: Theme!
   budget: Int!
+  statistics: [Statistic!]! @relation(name: "StatisticToUSer", onDelete: CASCADE)
   topics: [Topic!]! @relation(name: "UserToTopic", onDelete: SET_NULL)
   posts: [Post!]! @relation(name: "UserToPost", onDelete: CASCADE)
   transactions: [Transaction!]! @relation(name: "TransactionToUser", onDelete: SET_NULL)
@@ -105,7 +106,7 @@ type Currency {
 type Statistic {
   id: ID! @id
   topic: Topic!
-  user: User
+  user: User @relation(name: "StatisticToUSer", onDelete: SET_NULL)
   ip: String!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt

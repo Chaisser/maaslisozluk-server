@@ -1,11 +1,50 @@
 import getUserId from "./../../utils/getUserId";
 import getUser from "./../../utils/getUserId";
 import settings from "./../../utils/settings";
-import moment from "moment";
-import { Webhook, MessageBuilder } from "discord-webhook-node";
-const hook = new Webhook(process.env.DISCORD_WEBHOOK);
 
 const postMutation = {
+  async queueDeneme(parent, args, { request, prisma }, info) {
+    function Queue() {
+      this.elements = [];
+    }
+
+    Queue.prototype.enqueue = function (e) {
+      this.elements.push(e);
+    };
+
+    Queue.prototype.dequeue = function () {
+      return this.elements.shift();
+    };
+    Queue.prototype.isEmpty = function () {
+      return this.elements.length == 0;
+    };
+
+    Queue.prototype.length = function () {
+      return this.elements.length;
+    };
+
+    let q = new Queue();
+
+    const deneme = () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve("tamam");
+        }, 2000);
+      });
+    };
+
+    q.enqueue(deneme);
+
+    while (!q.isEmpty()) {
+      deneme().then(() => {
+        console.log(q.dequeue());
+      });
+    }
+
+    return {
+      result: "OK2",
+    };
+  },
   async createPost(parent, args, { request, prisma }, info) {
     const slug = args.topic;
     const { description } = args.data;
@@ -24,16 +63,6 @@ const postMutation = {
         slug,
       },
     });
-
-    const embed = new MessageBuilder()
-      .setTitle(topic.title)
-      .setURL(`https://www.maaslisozluk.com/konu/${topic.slug}`)
-      .setColor("#00b0f4")
-      .setDescription(description)
-      .setFooter("maaşlı haberci bildirdi", "https://storage.googleapis.com/cdn.maaslisozluk.com/maasli-sozluk.jpg")
-      .setTimestamp();
-
-    await hook.send(embed);
 
     return prisma.mutation.createPost(
       {
@@ -106,34 +135,93 @@ const postMutation = {
     let budgetType = null;
     let isPayable = false;
 
-    const post = await prisma.query.post(
-      {
-        where: {
-          id: postId,
-        },
-      },
-      `{
-        id 
-        likesPaidTimes
-        dislikesPaidTimes
-        user {
-          id
-        }
-        topic {
-          id
-        }
-        likes { 
-          id 
-          likeType
-          user { 
-            id
-          }
-        }
-    }`
-    );
-    if (!post) {
-      throw new Error("İçerik bulunamadı");
-    }
+    const isExist = () => {
+      return new Promise((resolve, reject) => {
+        prisma.exists
+          .Post({
+            id: postId,
+            user: {
+              id: user.userId,
+            },
+          })
+          .then((result) => {
+            if (result) {
+              reject("kendini beğenmiş");
+            }
+            resolve("ok-isExist");
+          })
+          .catch((err) => {
+            console.log(err, "isExist");
+            reject("bir hata oluştu - isExist");
+          });
+      });
+    };
+
+    const isLikeExist = () => {
+      return new Promise((resolve, reject) => {
+        prisma.exists
+          .Like({
+            post: {
+              id: postId,
+            },
+            likeType,
+            user: {
+              id: user.userId,
+            },
+          })
+          .then((result) => {
+            if (result) {
+              reject("tekrar eden like");
+            }
+            resolve("ok-isLikeExist");
+          })
+          .catch((err) => {
+            console.log(err, "isLikeExist");
+            reject("bir hata oluştu - isLikeExist");
+          });
+      });
+    };
+
+    const post = () => {
+      return new Promise((resolve, reject) => {
+        prisma.query
+          .post(
+            {
+              where: {
+                id: postId,
+              },
+            },
+            `{
+            id 
+            likesPaidTimes
+            dislikesPaidTimes
+            user {
+              id
+            }
+            topic {
+              id
+            }
+            likes { 
+              id 
+              likeType
+              user { 
+                id
+              }
+            }
+        }`
+          )
+          .then((result) => {
+            if (!result) {
+              reject("içerik bulunamadı");
+            }
+            resolve(result);
+          })
+          .catch((err) => {
+            console.log(err, "post");
+            reject("bir hata oluştu - post");
+          });
+      });
+    };
 
     const getUserLike = await prisma.query.likes(
       {
@@ -157,7 +245,7 @@ const postMutation = {
       likeType
     }`
     );
-    console.log(getUserLike, "GET USER LIKE");
+
     if (getUserLike.length > 0) {
       previousLikeType = getUserLike[0].likeType;
       previousLikeId = getUserLike[0].id;
@@ -246,6 +334,7 @@ const postMutation = {
       );
 
       const authorBudget = author.budget;
+
       const updateAuthor = await prisma.mutation.updateUser({
         where: {
           id: post.user.id,
