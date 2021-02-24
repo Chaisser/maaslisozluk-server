@@ -3,7 +3,11 @@ import hashPassword from "./../../utils/hashPassword";
 import bcrypt from "bcryptjs";
 import generateCode from "./../../utils/generateCode";
 import getUserId from "./../../utils/getUserId";
-import { sendWelcomeEmail, sendActivationEmail, sendResetPasswordEmail } from "./../../email/email";
+import {
+  sendWelcomeEmail,
+  sendActivationEmail,
+  sendResetPasswordEmail,
+} from "./../../email/email";
 import axios from "axios";
 import passwordStrength from "check-password-strength";
 
@@ -57,7 +61,10 @@ const userMutation = {
       password
     }`
     );
-    const isMatch = await bcrypt.compare(args.data.currentPassword, userInformation.password);
+    const isMatch = await bcrypt.compare(
+      args.data.currentPassword,
+      userInformation.password
+    );
 
     if (!isMatch) {
       throw new Error("hatalı şifre");
@@ -90,7 +97,7 @@ const userMutation = {
       args.data.phoneNumber = args.data.phoneNumber.replace(/[^\d]/g, "");
     }
 
-    if (passwordStrength(password).value === "Weak") {
+    if (passwordStrength(args.data.password).value === "Weak") {
       throw new Error("şifre çok basit");
     }
 
@@ -108,7 +115,9 @@ const userMutation = {
       "superuser",
     ];
 
-    const isUsernameValid = forbiddenUsernames.find((u) => u === args.data.username);
+    const isUsernameValid = forbiddenUsernames.find(
+      (u) => u === args.data.username
+    );
 
     if (isUsernameValid) {
       throw new Error("Bu kullanıcı adı alınamaz");
@@ -120,7 +129,6 @@ const userMutation = {
 
     const userType = "USER";
     const theme = "LIGHT";
-
     const user = await prisma.mutation.createUser(
       {
         data: {
@@ -265,7 +273,11 @@ const userMutation = {
       },
     });
 
-    const sendResetPassword = sendResetPasswordEmail(args.email, emailActivationCode, user.id);
+    const sendResetPassword = sendResetPasswordEmail(
+      args.email,
+      emailActivationCode,
+      user.id
+    );
 
     return {
       result: "success",
@@ -278,7 +290,10 @@ const userMutation = {
       throw new Error("Hatalı Kod");
     }
 
-    if (emailActivationCode !== result.emailActivationCode || email !== result.email) {
+    if (
+      emailActivationCode !== result.emailActivationCode ||
+      email !== result.email
+    ) {
       throw new Error("Hatalı Kod");
     }
     return {
@@ -297,7 +312,10 @@ const userMutation = {
       throw new Error("Hatalı Kod");
     }
 
-    if (emailActivationCode !== result.emailActivationCode || email !== result.email) {
+    if (
+      emailActivationCode !== result.emailActivationCode ||
+      email !== result.email
+    ) {
       throw new Error("Hatalı Kod");
     }
 
@@ -353,7 +371,11 @@ const userMutation = {
 
     const result = await prisma.query.users(
       {
-        where: { id: userId, phoneNumberActivationCode, phoneNumberActivation: false },
+        where: {
+          id: userId,
+          phoneNumberActivationCode,
+          phoneNumberActivation: false,
+        },
       },
       `{
       id

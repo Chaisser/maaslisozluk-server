@@ -4,3 +4,4 @@ package-lock.json
 /config
 tmp
 .env
+.DS_Store
