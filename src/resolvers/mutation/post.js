@@ -3,48 +3,6 @@ import getUser from "./../../utils/getUserId";
 import settings from "./../../utils/settings";
 
 const postMutation = {
-  async queueDeneme(parent, args, { request, prisma }, info) {
-    function Queue() {
-      this.elements = [];
-    }
-
-    Queue.prototype.enqueue = function (e) {
-      this.elements.push(e);
-    };
-
-    Queue.prototype.dequeue = function () {
-      return this.elements.shift();
-    };
-    Queue.prototype.isEmpty = function () {
-      return this.elements.length == 0;
-    };
-
-    Queue.prototype.length = function () {
-      return this.elements.length;
-    };
-
-    let q = new Queue();
-
-    const deneme = () => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve("tamam");
-        }, 2000);
-      });
-    };
-
-    q.enqueue(deneme);
-
-    while (!q.isEmpty()) {
-      deneme().then(() => {
-        console.log(q.dequeue());
-      });
-    }
-
-    return {
-      result: "OK2",
-    };
-  },
   async createPost(parent, args, { request, prisma }, info) {
     const slug = args.topic;
     const { description } = args.data;
@@ -148,7 +106,7 @@ const postMutation = {
             if (result) {
               reject("kendini beğenmiş");
             }
-            resolve("ok-isExist");
+            resolve("ok");
           })
           .catch((err) => {
             console.log(err, "isExist");
@@ -173,7 +131,7 @@ const postMutation = {
             if (result) {
               reject("tekrar eden like");
             }
-            resolve("ok-isLikeExist");
+            resolve("ok");
           })
           .catch((err) => {
             console.log(err, "isLikeExist");
@@ -223,154 +181,213 @@ const postMutation = {
       });
     };
 
-    const getUserLike = await prisma.query.likes(
-      {
-        where: {
-          AND: [
+    const doLike = (post) => {
+      return new Promise((resolve, reject) => {
+        prisma.query
+          .likes(
             {
-              user: {
-                id: user.userId,
+              where: {
+                AND: [
+                  {
+                    user: {
+                      id: user.userId,
+                    },
+                  },
+                  {
+                    post: {
+                      id: post.id,
+                    },
+                  },
+                ],
               },
             },
-            {
-              post: {
-                id: postId,
-              },
-            },
-          ],
-        },
-      },
-      `{
-      id
-      likeType
-    }`
-    );
+            `{
+          id
+          likeType
+        }`
+          )
+          .then((getUserLike) => {
+            if (getUserLike.length > 0) {
+              previousLikeType = getUserLike[0].likeType;
+              previousLikeId = getUserLike[0].id;
+            }
 
-    if (getUserLike.length > 0) {
-      previousLikeType = getUserLike[0].likeType;
-      previousLikeId = getUserLike[0].id;
-    }
+            let dislikesPaidTimes = post.dislikesPaidTimes;
+            let likesPaidTimes = post.likesPaidTimes;
 
-    let dislikesPaidTimes = post.dislikesPaidTimes;
-    let likesPaidTimes = post.likesPaidTimes;
+            if (!previousLikeId) {
+              if (args.likeType === "LIKE") {
+                if (likesPaidTimes + 1 === settings.likesPaidTimes) {
+                  amount = settings.likesPaidAmount;
+                  isPayable = true;
+                  budgetType = "LIKE";
+                  likesPaidTimes = 0;
+                }
 
-    if (!previousLikeId) {
-      if (args.likeType === "LIKE") {
-        if (likesPaidTimes + 1 === settings.likesPaidTimes) {
-          amount = settings.likesPaidAmount;
-          isPayable = true;
-          budgetType = "LIKE";
-          likesPaidTimes = 0;
-        }
+                likesPaidTimes = likesPaidTimes + 1;
+              }
 
-        likesPaidTimes = likesPaidTimes + 1;
-      }
+              if (args.likeType === "DISLIKE") {
+                if (dislikesPaidTimes + 1 === settings.dislikesPaidTimes) {
+                  amount = settings.dislikesPaidAmount;
+                  isPayable = true;
+                  budgetType = "DISLIKE";
+                  dislikesPaidTimes = 0;
+                }
+                dislikesPaidTimes = dislikesPaidTimes + 1;
+              }
+              resolve({
+                likesPaidTimes,
+                dislikesPaidTimes,
+                previousLikeId,
+                isPayable,
+                budgetType,
+                amount,
+                likeTypeSimilarity: false,
+              });
+            } else {
+              if (previousLikeType === args.likeType) {
+                if (previousLikeType === "LIKE") {
+                  likesPaidTimes = likesPaidTimes - 1;
+                } else {
+                  dislikesPaidTimes = dislikesPaidTimes - 1;
+                }
 
-      if (args.likeType === "DISLIKE") {
-        if (dislikesPaidTimes + 1 === settings.dislikesPaidTimes) {
-          amount = settings.dislikesPaidAmount;
-          isPayable = true;
-          budgetType = "DISLIKE";
-          dislikesPaidTimes = 0;
-        }
-        dislikesPaidTimes = dislikesPaidTimes + 1;
-      }
-    } else {
-      if (previousLikeType === args.likeType) {
-        if (previousLikeType === "LIKE") {
-          likesPaidTimes = likesPaidTimes - 1;
-        } else {
-          dislikesPaidTimes = dislikesPaidTimes - 1;
-        }
-        return prisma.mutation.updatePost({
-          where: {
-            id: postId,
-          },
-          data: {
-            likesPaidTimes,
-            dislikesPaidTimes,
-            likes: {
-              delete: {
-                id: previousLikeId,
-              },
-            },
-          },
-        });
-      }
+                resolve({
+                  likesPaidTimes,
+                  dislikesPaidTimes,
+                  previousLikeId,
+                  isPayable,
+                  budgetType,
+                  amount,
+                  likeTypeSimilarity: true,
+                });
+              }
 
-      if (previousLikeType === "DISLIKE") {
-        dislikesPaidTimes = dislikesPaidTimes - 1;
-        likesPaidTimes = likesPaidTimes + 1;
-      } else {
-        dislikesPaidTimes = dislikesPaidTimes + 1;
-        likesPaidTimes = likesPaidTimes - 1;
-      }
+              if (previousLikeType === "DISLIKE") {
+                dislikesPaidTimes = dislikesPaidTimes - 1;
+                likesPaidTimes = likesPaidTimes + 1;
+              } else {
+                dislikesPaidTimes = dislikesPaidTimes + 1;
+                likesPaidTimes = likesPaidTimes - 1;
+              }
 
-      if (dislikesPaidTimes === settings.dislikesPaidTimes) {
-        amount = settings.dislikesPaidAmount;
-        isPayable = true;
-        budgetType = "DISLIKE";
-        dislikesPaidTimes = 0;
-      }
-      if (likesPaidTimes === settings.likesPaidTimes) {
-        amount = settings.likesPaidAmount;
-        isPayable = true;
-        budgetType = "LIKE";
-        likesPaidTimes = 0;
-      }
-    }
-
-    if (isPayable) {
-      const author = await prisma.query.user(
-        {
-          where: {
-            id: post.user.id,
-          },
-        },
-        `{
-        id 
-        budget
-      }`
-      );
-
-      const authorBudget = author.budget;
-
-      const updateAuthor = await prisma.mutation.updateUser({
-        where: {
-          id: post.user.id,
-        },
-        data: {
-          budget: authorBudget + amount,
-        },
+              if (dislikesPaidTimes === settings.dislikesPaidTimes) {
+                amount = settings.dislikesPaidAmount;
+                isPayable = true;
+                budgetType = "DISLIKE";
+                dislikesPaidTimes = 0;
+              }
+              if (likesPaidTimes === settings.likesPaidTimes) {
+                amount = settings.likesPaidAmount;
+                isPayable = true;
+                budgetType = "LIKE";
+                likesPaidTimes = 0;
+              }
+              resolve({
+                likesPaidTimes,
+                dislikesPaidTimes,
+                previousLikeId,
+                isPayable,
+                budgetType,
+                amount,
+                likeTypeSimilarity: false,
+              });
+            }
+          });
       });
-
-      const addTransaction = await prisma.mutation.createTransaction({
-        data: {
-          amount,
-          budgetType,
-          user: { connect: { id: post.user.id } },
-          topic: { connect: { id: post.topic.id } },
-          post: { connect: { id: postId } },
-        },
-      });
-    }
-
-    const likes = {
-      create: { likeType, user: { connect: { id: user.userId } } },
     };
 
-    if (previousLikeId) {
-      likes.delete = { id: previousLikeId };
-    }
+    const addPayment = (paymentData, post) => {
+      return new Promise((resolve, reject) => {
+        if (paymentData.isPayable) {
+          console.log("burada");
+          prisma.query
+            .user(
+              {
+                where: {
+                  id: post.user.id,
+                },
+              },
+              `{
+            id
+            budget
+          }`
+            )
+            .then((userData) => {
+              const authorBudget = userData.budget;
+              console.log(authorBudget, "AUTHOR BUDGET");
+              prisma.mutation
+                .updateUser({
+                  where: {
+                    id: post.user.id,
+                  },
+                  data: {
+                    budget: authorBudget + paymentData.amount,
+                  },
+                })
+                .then((updatedUserData) => {
+                  prisma.mutation
+                    .createTransaction({
+                      data: {
+                        amount: paymentData.amount,
+                        budgetType: paymentData.budgetType,
+                        user: { connect: { id: post.user.id } },
+                        topic: { connect: { id: post.topic.id } },
+                        post: { connect: { id: post.id } },
+                      },
+                    })
+                    .then((result) => {
+                      resolve("payment and transaction added");
+                    });
+                });
+            });
+        } else {
+          resolve("payment not added");
+        }
+      });
+    };
 
-    return prisma.mutation.updatePost({
-      where: { id: postId },
-      data: {
-        dislikesPaidTimes,
-        likesPaidTimes,
-        likes: { ...likes },
-      },
-    });
+    const updatePost = (likeData) => {
+      return new Promise((resolve, reject) => {
+        const likes = {};
+        if (likeData.previousLikeId) {
+          likes.delete = {
+            id: likeData.previousLikeId,
+          };
+        }
+        if (!likeData.likeTypeSimilarity) {
+          likes.create = {
+            likeType,
+            user: {
+              connect: { id: user.userId },
+            },
+          };
+        }
+        prisma.mutation
+          .updatePost({
+            where: {
+              id: postId,
+            },
+            data: {
+              likesPaidTimes: likeData.likesPaidTimes,
+              dislikesPaidTimes: likeData.dislikesPaidTimes,
+              likes,
+            },
+          })
+          .then((result) => {
+            resolve(result);
+          });
+      });
+    };
+
+    const isPostExists = await isExist();
+    const isLikeExists = await isLikeExist();
+    const postData = await post();
+    const likeData = await doLike(postData);
+    const paymentData = await addPayment(likeData, postData);
+    const updatedPost = await updatePost(likeData);
+    return updatedPost;
   },
   async favoritePost(parent, args, { request, prisma }, info) {
     const postId = args.id;
