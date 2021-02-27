@@ -93,6 +93,13 @@ const postMutation = {
     let budgetType = null;
     let isPayable = false;
 
+    const waitALittle = () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve("ok");
+        }, 500);
+      });
+    };
     const isExist = () => {
       return new Promise((resolve, reject) => {
         prisma.exists
@@ -381,6 +388,7 @@ const postMutation = {
       });
     };
 
+    await waitALittle();
     const isPostExists = await isExist();
     const isLikeExists = await isLikeExist();
     const postData = await post();
