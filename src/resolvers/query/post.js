@@ -15,17 +15,17 @@ const postQuery = {
     );
   },
   async post(parent, args, { prisma, request }, info) {
-    const user = getUserId(request);
-    const userId = user.userId;
-    const isExist = await prisma.exists.Post({
-      id: args.id,
-      user: {
-        id: userId,
-      },
-    });
-    if (!isExist) {
-      throw new Error("Permission denied");
-    }
+    // const user = getUserId(request);
+    // const userId = user.userId;
+    // const isExist = await prisma.exists.Post({
+    //   id: args.id,
+    //   user: {
+    //     id: userId,
+    //   },
+    // });
+    // if (!isExist) {
+    //   throw new Error("Permission denied");
+    // }
 
     const result = await prisma.query.post(
       {
@@ -33,15 +33,7 @@ const postQuery = {
           id: args.id,
         },
       },
-      `{
-        id 
-        description
-        topic {
-          id 
-          title
-          slug
-        }
-      }`
+      info
     );
     return result;
   },
