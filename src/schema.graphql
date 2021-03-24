@@ -184,6 +184,11 @@ type Topic {
   updatedAt: String!
 }
 
+type Wiki {
+  id: ID!
+  title: String!
+}
+
 input CreateTopicInput {
   title: String!
   description: String!
