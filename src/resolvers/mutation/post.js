@@ -93,11 +93,11 @@ const postMutation = {
     let budgetType = null;
     let isPayable = false;
 
-    const waitALittle = () => {
+    const waitALittle = (sec) => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve("ok");
-        }, 500);
+        }, sec);
       });
     };
     const isExist = () => {
@@ -388,14 +388,14 @@ const postMutation = {
       });
     };
 
-    await waitALittle();
-    const isPostExists = await isExist();
-    const isLikeExists = await isLikeExist();
-    const postData = await post();
-    const likeData = await doLike(postData);
-    const paymentData = await addPayment(likeData, postData);
-    const updatedPost = await updatePost(likeData);
-    return updatedPost;
+    // const isPostExists = await isExist();
+    // const isLikeExists = await isLikeExist();
+    // const postData = await post();
+    const control = await Promise.all([isExist(), isLikeExist(), post()]);
+
+    const likeData = await doLike(control[2]);
+    const postAndPayment = await Promise.all([addPayment(likeData), control[2], updatePost(likeData)]);
+    return postAndPayment[0];
   },
   async favoritePost(parent, args, { request, prisma }, info) {
     const postId = args.id;
