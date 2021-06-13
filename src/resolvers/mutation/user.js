@@ -173,7 +173,10 @@ const userMutation = {
     );
 
     if (args.data.phoneNumber) {
+      console.log("t var");
       args.data.phoneNumber = args.data.phoneNumber.replace(/[^\d]/g, "");
+    } else {
+      delete args.data.phoneNumber;
     }
     if (userInformation.emailActivation) {
       delete args.data.email;
@@ -182,8 +185,9 @@ const userMutation = {
     if (userInformation.phoneNumberActivation) {
       delete args.data.phoneNumber;
     }
-
+    console.log(args.data.phoneNumber, "PP");
     if (args.data.phoneNumber || args.data.email) {
+      console.log(args.data.phoneNumber, "PP");
       const isExist = await prisma.exists.User({
         AND: [
           {

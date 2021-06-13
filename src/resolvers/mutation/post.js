@@ -86,7 +86,7 @@ const postMutation = {
     const postId = args.id;
     const likeType = args.likeType;
     const user = getUserId(request);
-
+    // console.log(user, "USER FROM POST.JS");
     let previousLikeType = null;
     let previousLikeId = null;
     let amount = 0;
@@ -306,6 +306,7 @@ const postMutation = {
     };
 
     const addPayment = (paymentData, post) => {
+      console.log(post, "POST FROM 309 POST.JS");
       return new Promise((resolve, reject) => {
         if (paymentData.isPayable) {
           console.log("burada");
@@ -322,6 +323,7 @@ const postMutation = {
           }`
             )
             .then((userData) => {
+              console.log(userData, "USER DATA FROM 326 POST:js");
               const authorBudget = userData.budget;
               console.log(authorBudget, "AUTHOR BUDGET");
               prisma.mutation
@@ -383,7 +385,12 @@ const postMutation = {
             },
           })
           .then((result) => {
+            console.log("RESOLVE UPDATE POST");
             resolve(result);
+          })
+          .catch((err) => {
+            console.log(err, "ERROR UPDATE POST");
+            reject("hata update post");
           });
       });
     };
@@ -392,10 +399,13 @@ const postMutation = {
     // const isLikeExists = await isLikeExist();
     // const postData = await post();
     const control = await Promise.all([isExist(), isLikeExist(), post()]);
-
+    console.log(control[2], "CONTROL 2 POST.JS");
     const likeData = await doLike(control[2]);
-    const postAndPayment = await Promise.all([addPayment(likeData), control[2], updatePost(likeData)]);
-    return postAndPayment[0];
+    const postAndPayment = await Promise.all([
+      addPayment(likeData, control[2]),
+      updatePost(likeData),
+    ]);
+    return postAndPayment[1];
   },
   async favoritePost(parent, args, { request, prisma }, info) {
     const postId = args.id;
@@ -467,7 +477,9 @@ const postMutation = {
         },
         data: {
           favoritesPaidTimes:
-            post.favoritesPaidTimes + 1 === settings.favouritePaidTimes ? 0 : post.favoritesPaidTimes + 1,
+            post.favoritesPaidTimes + 1 === settings.favouritePaidTimes
+              ? 0
+              : post.favoritesPaidTimes + 1,
         },
       });
 
